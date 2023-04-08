@@ -13,7 +13,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-//	@title			Swagger Example API
+//	@title			DurpAPI
 //	@version		1.0
 //	@description	This is a sample server celler server.
 //	@termsOfService	http://swagger.io/terms/
@@ -68,6 +68,10 @@ func main() {
 		{
 			openai.GET("general", c.GeneralOpenAI)
 			openai.GET("travelagent", c.TravelAgentOpenAI)
+		}
+		unraid := v1.Group("/unraid")
+		{
+			unraid.GET("powerusage", c.UnraidPowerUsage)
 		}
 	}
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
