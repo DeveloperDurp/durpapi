@@ -12,6 +12,14 @@ type Controller struct {
 	openaiClient *openai.Client
 	unraidAPIKey string
 	unraidURI    string
+
+	config *configStruct
+}
+
+type configStruct struct {
+	openaiApiKey string `json : "OPENAI_API_KEY"`
+	unraidAPIKey string `json : "UNRAID_API_KEY"`
+	unraidURI    string `json : "UNRAID_URI"`
 }
 
 func NewController() *Controller {
