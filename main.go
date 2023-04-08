@@ -1,14 +1,11 @@
 package main
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/DeveloperDurp/DurpAPI/controller"
 	_ "github.com/DeveloperDurp/DurpAPI/docs"
-	"github.com/DeveloperDurp/DurpAPI/httputil"
 	"github.com/gin-gonic/gin"
-
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -30,32 +27,6 @@ import (
 
 //	@securityDefinitions.basic	BasicAuth
 
-//	@securityDefinitions.apikey	ApiKeyAuth
-//	@in							header
-//	@name						Authorization
-//	@description				Description for what is this security definition being used
-
-//	@securitydefinitions.oauth2.application	OAuth2Application
-//	@tokenUrl								https://example.com/oauth/token
-//	@scope.write							Grants write access
-//	@scope.admin							Grants read and write access to administrative information
-
-//	@securitydefinitions.oauth2.implicit	OAuth2Implicit
-//	@authorizationUrl						https://example.com/oauth/authorize
-//	@scope.write							Grants write access
-//	@scope.admin							Grants read and write access to administrative information
-
-//	@securitydefinitions.oauth2.password	OAuth2Password
-//	@tokenUrl								https://example.com/oauth/token
-//	@scope.read								Grants read access
-//	@scope.write							Grants write access
-//	@scope.admin							Grants read and write access to administrative information
-
-//	@securitydefinitions.oauth2.accessCode	OAuth2AccessCode
-//	@tokenUrl								https://example.com/oauth/token
-//	@authorizationUrl						https://example.com/oauth/authorize
-//	@scope.admin							Grants read and write access to administrative information
-
 func main() {
 
 	r := gin.Default()
@@ -66,11 +37,13 @@ func main() {
 	{
 		openai := v1.Group("/openai")
 		{
+			openai.Use(authMiddleware())
 			openai.GET("general", c.GeneralOpenAI)
 			openai.GET("travelagent", c.TravelAgentOpenAI)
 		}
 		unraid := v1.Group("/unraid")
 		{
+			unraid.Use(authMiddleware())
 			unraid.GET("powerusage", c.UnraidPowerUsage)
 		}
 	}
@@ -78,12 +51,28 @@ func main() {
 	r.Run(":8080")
 }
 
-func auth() gin.HandlerFunc {
+func authMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if len(c.GetHeader("Authorization")) == 0 {
-			httputil.NewError(c, http.StatusUnauthorized, errors.New("Authorization is required Header"))
-			c.Abort()
+		// Get the username and password from the request header
+		username, password, ok := c.Request.BasicAuth()
+		if !ok {
+			c.Header("WWW-Authenticate", "Basic realm=Restricted")
+			c.AbortWithStatus(http.StatusUnauthorized)
+			return
 		}
+
+		// Check if the username and password are valid
+		if username != "user" || password != "password" {
+			c.Header("WWW-Authenticate", "Basic realm=Restricted")
+			c.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+
+		// Set the user ID in the context for later use
+		userID := "user"
+		c.Set("userID", userID)
+
+		// Call the next middleware or handler function
 		c.Next()
 	}
 }
