@@ -20,7 +20,7 @@ func NewController() *Controller {
 	openaiApiKey := os.Getenv("OPENAI_API_KEY")
 	openaiClient := openai.NewClient(openaiApiKey)
 	unraidAPIKey := os.Getenv("UNRAID_API_KEY")
-	UNRAID_URI := os.Getenv("UNRAID_URI")
+	unraidURI := os.Getenv("UNRAID_URI")
 
 	if err != nil {
 		fmt.Println(err.Error())
@@ -29,7 +29,7 @@ func NewController() *Controller {
 	return &Controller{
 		openaiClient: openaiClient,
 		unraidAPIKey: unraidAPIKey,
-		unraidURI:    UNRAID_URI,
+		unraidURI:    unraidURI,
 	}
 }
 
