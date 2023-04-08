@@ -2,12 +2,15 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
+	"os"
+	"os/exec"
 
+	"github.com/DeveloperDurp/DurpAPI/controller"
+	_ "github.com/DeveloperDurp/DurpAPI/docs"
+	"github.com/DeveloperDurp/DurpAPI/httputil"
 	"github.com/gin-gonic/gin"
-	"github.com/swaggo/swag/example/celler/controller"
-	_ "github.com/swaggo/swag/example/celler/docs"
-	"github.com/swaggo/swag/example/celler/httputil"
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -57,6 +60,7 @@ import (
 //	@scope.admin							Grants read and write access to administrative information
 
 func main() {
+
 	r := gin.Default()
 
 	c := controller.NewController()
@@ -91,6 +95,10 @@ func main() {
 			examples.GET("securities", c.SecuritiesExample)
 			examples.GET("attribute", c.AttributeExample)
 		}
+		openai := v1.Group("/openai")
+		{
+			openai.GET("general", c.GeneralOpenAI)
+		}
 	}
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.Run(":8080")
@@ -103,5 +111,16 @@ func auth() gin.HandlerFunc {
 			c.Abort()
 		}
 		c.Next()
+	}
+}
+
+func init() {
+	fmt.Println("Running swag init...")
+	cmd := exec.Command("swag", "init")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		fmt.Println("Error running swag init:", err)
+		os.Exit(1)
 	}
 }
