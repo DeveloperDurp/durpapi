@@ -18,11 +18,8 @@ jobs:
       with:
         version: 'v3.7.0'
 
-    - name: Package Helm chart
-      run: helm package ./charts --version 1.0.0
-
-    - name: Publish Helm chart package
-      uses: GitHubPackages/publish-package@v1
+    - name: Publish Helm chart
+      uses: stefanprodan/helm-gh-pages@master
       with:
         package_name: my-chart
         package_version: 1.0.0
