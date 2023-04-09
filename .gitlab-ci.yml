@@ -2,12 +2,3 @@ include:
   - project: 'developerdurp/yml'
     ref: main
     file: 'pipelines/build-container.yml'
-
-upload:
-  image: dtzar/helm-kubectl
-  stage: build
-  script:
-    - helm repo add --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_PROJECT_NAME} ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/stable
-    - helm package ./charts/durpapi
-    - helm plugin install https://github.com/chartmuseum/helm-push
-    - helm cm-push  ./durpapi-0.1.0.tgz  ${CI_PROJECT_NAME}
