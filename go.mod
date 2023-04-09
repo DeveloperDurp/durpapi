@@ -1,4 +1,4 @@
-module github.com/DeveloperDurp/DurpAPI
+module gitlab.com/DeveloperDurp/DurpAPI
 
 go 1.19
 
