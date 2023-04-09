@@ -89,6 +89,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/token/generateTokenHandler": {
+            "get": {
+                "description": "Gets the PSU Data from unraid",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "token"
+                ],
+                "summary": "Generate JWT Token",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Secret Token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "response",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/unraid/powerusage": {
             "get": {
                 "description": "Gets the PSU Data from unraid",
@@ -115,50 +147,9 @@ const docTemplate = `{
     },
     "securityDefinitions": {
         "ApiKeyAuth": {
-            "description": "Description for what is this security definition being used",
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"
-        },
-        "BasicAuth": {
-            "type": "basic"
-        },
-        "OAuth2AccessCode": {
-            "type": "oauth2",
-            "flow": "accessCode",
-            "authorizationUrl": "https://example.com/oauth/authorize",
-            "tokenUrl": "https://example.com/oauth/token",
-            "scopes": {
-                "admin": "\t\t\t\t\t\t\tGrants read and write access to administrative information"
-            }
-        },
-        "OAuth2Application": {
-            "type": "oauth2",
-            "flow": "application",
-            "tokenUrl": "https://example.com/oauth/token",
-            "scopes": {
-                "admin": "\t\t\t\t\t\t\tGrants read and write access to administrative information",
-                "write": "\t\t\t\t\t\t\tGrants write access"
-            }
-        },
-        "OAuth2Implicit": {
-            "type": "oauth2",
-            "flow": "implicit",
-            "authorizationUrl": "https://example.com/oauth/authorize",
-            "scopes": {
-                "admin": "\t\t\t\t\t\t\tGrants read and write access to administrative information",
-                "write": "\t\t\t\t\t\t\tGrants write access"
-            }
-        },
-        "OAuth2Password": {
-            "type": "oauth2",
-            "flow": "password",
-            "tokenUrl": "https://example.com/oauth/token",
-            "scopes": {
-                "admin": "\t\t\t\t\t\t\tGrants read and write access to administrative information",
-                "read": "\t\t\t\t\t\t\t\tGrants read access",
-                "write": "\t\t\t\t\t\t\tGrants write access"
-            }
         }
     }
 }`

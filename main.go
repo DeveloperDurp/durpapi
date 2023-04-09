@@ -2,9 +2,12 @@ package main
 
 import (
 	"net/http"
+	"os"
+	"strings"
 
 	"github.com/DeveloperDurp/DurpAPI/controller"
 	_ "github.com/DeveloperDurp/DurpAPI/docs"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -25,16 +28,21 @@ import (
 //	@host		durpapi.durp.info
 //	@BasePath	/api/v1
 
-//	@securityDefinitions.basic	BasicAuth
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 
 func main() {
 
 	r := gin.Default()
-
 	c := controller.NewController()
 
 	v1 := r.Group("/api/v1")
 	{
+		token := v1.Group("/token")
+		{
+			token.GET("generateTokenHandler", c.GenerateTokenHandler)
+		}
 		openai := v1.Group("/openai")
 		{
 			openai.Use(authMiddleware())
@@ -53,26 +61,33 @@ func main() {
 
 func authMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// Get the username and password from the request header
-		username, password, ok := c.Request.BasicAuth()
-		if !ok {
-			c.Header("WWW-Authenticate", "Basic realm=Restricted")
-			c.AbortWithStatus(http.StatusUnauthorized)
+		// Get the authorization header from the request
+		authHeader := c.GetHeader("Authorization")
+
+		// Check if the authorization header is missing or doesn't start with "Bearer"
+		if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Unauthorized access"})
 			return
 		}
 
-		// Check if the username and password are valid
-		if username != "user" || password != "password" {
-			c.Header("WWW-Authenticate", "Basic realm=Restricted")
-			c.AbortWithStatus(http.StatusUnauthorized)
+		// Extract the token from the authorization header
+		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+
+		// Parse the token and validate its signature
+		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+			return []byte(os.Getenv("jwtToken")), nil
+		})
+
+		// Check if there was an error parsing the token or if it is not valid
+		if err != nil || !token.Valid {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Unauthorized access"})
 			return
 		}
 
-		// Set the user ID in the context for later use
-		userID := "user"
-		c.Set("userID", userID)
+		// Add the token to the request context
+		c.Set("token", token)
 
-		// Call the next middleware or handler function
+		// Call the next handler
 		c.Next()
 	}
 }

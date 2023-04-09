@@ -55,6 +55,27 @@ paths:
       summary: Travel Agent ChatGPT
       tags:
       - openai
+  /token/generateTokenHandler:
+    get:
+      consumes:
+      - application/json
+      description: Gets the PSU Data from unraid
+      parameters:
+      - description: Secret Token
+        in: query
+        name: token
+        required: true
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: response
+          schema:
+            type: string
+      summary: Generate JWT Token
+      tags:
+      - token
   /unraid/powerusage:
     get:
       consumes:
@@ -72,39 +93,7 @@ paths:
       - unraid
 securityDefinitions:
   ApiKeyAuth:
-    description: Description for what is this security definition being used
     in: header
     name: Authorization
     type: apiKey
-  BasicAuth:
-    type: basic
-  OAuth2AccessCode:
-    authorizationUrl: https://example.com/oauth/authorize
-    flow: accessCode
-    scopes:
-      admin: "\t\t\t\t\t\t\tGrants read and write access to administrative information"
-    tokenUrl: https://example.com/oauth/token
-    type: oauth2
-  OAuth2Application:
-    flow: application
-    scopes:
-      admin: "\t\t\t\t\t\t\tGrants read and write access to administrative information"
-      write: "\t\t\t\t\t\t\tGrants write access"
-    tokenUrl: https://example.com/oauth/token
-    type: oauth2
-  OAuth2Implicit:
-    authorizationUrl: https://example.com/oauth/authorize
-    flow: implicit
-    scopes:
-      admin: "\t\t\t\t\t\t\tGrants read and write access to administrative information"
-      write: "\t\t\t\t\t\t\tGrants write access"
-    type: oauth2
-  OAuth2Password:
-    flow: password
-    scopes:
-      admin: "\t\t\t\t\t\t\tGrants read and write access to administrative information"
-      read: "\t\t\t\t\t\t\t\tGrants read access"
-      write: "\t\t\t\t\t\t\tGrants write access"
-    tokenUrl: https://example.com/oauth/token
-    type: oauth2
 swagger: "2.0"
