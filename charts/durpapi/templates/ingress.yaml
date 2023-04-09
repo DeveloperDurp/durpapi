@@ -16,7 +16,7 @@ spec:
           service:
             name: durpapi
             port: 
-              number: http         
+              number: 80         
   tls:
     - hosts: 
       - {{ .Values.ingress.host }}
