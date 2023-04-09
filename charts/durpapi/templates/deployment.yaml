@@ -9,7 +9,7 @@ spec:
   selector:
     matchLabels:
       app: durpapi
-  replicas: 1
+  replicas: {{ .Values.deployment.replicas }}
   template:
     metadata:
       labels:
@@ -17,11 +17,11 @@ spec:
     spec:
       containers:
       - name: durpapi
-        image: ghcr.io/developerdurp/durpapi:latest
-        imagePullPolicy: Always       
+        image: "{{ .Values.deployment.image }}:{{ .Values.deployment.tag }}"
+        imagePullPolicy: {{ .Values.deployment.imagePullPolicy }}       
         ports:
         - name: http
-          containerPort: 8080
+          containerPort: http
         envFrom:
         - secretRef:
-            name: durpapi-secret
+            name: {{ .Values.deployment.secretfile }} 

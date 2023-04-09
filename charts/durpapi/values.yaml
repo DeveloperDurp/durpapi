@@ -1,0 +1,15 @@
+deployment: 
+  replicas: 1
+  image: ghcr.io/developerdurp/durpapi
+  tag: latest
+  imagePullPolicy: always
+  secretfile: durpapi-secret
+
+ingress:
+  clusterissuer: letsencrypt-production
+  host: durpapi.durp.info
+  tls: durpapi-tls
+
+service:
+  type: ClusterIP
+  port: 8080
