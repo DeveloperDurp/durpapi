@@ -5,12 +5,12 @@ import (
 	"os"
 	"strings"
 
-	"github.com/DeveloperDurp/DurpAPI/controller"
-	_ "github.com/DeveloperDurp/DurpAPI/docs"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"gitlab.com/DeveloperDurp/DurpAPI/controller"
+	_ "gitlab.com/DeveloperDurp/DurpAPI/docs"
 )
 
 //	@title			DurpAPI
