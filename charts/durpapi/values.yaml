@@ -1,8 +1,8 @@
 deployment: 
   replicas: 1
-  image: ghcr.io/developerdurp/durpapi
+  image: registry.gitlab.com/developerdurp/durpapi
   tag: latest
-  imagePullPolicy: always
+  imagePullPolicy: Always
   secretfile: durpapi-secret
 
 ingress:
