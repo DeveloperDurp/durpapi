@@ -21,6 +21,4 @@ jobs:
     - name: Publish Helm chart
       uses: stefanprodan/helm-gh-pages@master
       with:
-        package_name: my-chart
-        package_version: 1.0.0
         token: ${{secrets.GITHUB_TOKEN}}
