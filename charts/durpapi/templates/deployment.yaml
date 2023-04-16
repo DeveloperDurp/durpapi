@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: durpapi
-  name: durpapi
+  namespace: {{ .Chart.Name }}
+  name: {{ .Chart.Name }}
   labels:
-    app: durpapi
+    app: {{ .Chart.Name }}
 spec:
   selector:
     matchLabels:
-      app: durpapi
+      app: {{ .Chart.Name }}
   replicas: {{ .Values.deployment.replicas }}
   template:
     metadata:
       labels:
-        app: durpapi
+        app: {{ .Chart.Name }}
     spec:
       containers:
-      - name: durpapi
-        image: "{{ .Values.deployment.image }}:{{ .Values.deployment.tag }}"
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.deployment.image }}:{{ default .Chart.Version .Values.deployment.tag }}"
         imagePullPolicy: {{ .Values.deployment.imagePullPolicy }}       
         ports:
         - name: http
-          containerPort: 80
+          containerPort: {{ .Values.service.port }}
         envFrom:
         - secretRef:
             name: {{ .Values.deployment.secretfile }} 

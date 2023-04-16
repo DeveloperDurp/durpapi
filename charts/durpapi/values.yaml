@@ -1,7 +1,7 @@
 deployment: 
   replicas: 1
   image: registry.gitlab.com/developerdurp/durpapi
-  tag: latest
+  tag: ""
   imagePullPolicy: Always
   secretfile: durpapi-secret
 
@@ -11,7 +11,6 @@ ingress:
   tls: durpapi-tls
 
 service:
-  name: durpapi
   type: ClusterIP
   port: 8080
   targetport: 80
