@@ -9,7 +9,7 @@ spec:
   - match: Host("{{ .Values.ingress.host }}") && PathPrefix(`/`)
     kind: Rule
     services:
-    - name: {{ .Values.service.name }}-service
+    - name: "{{ .Values.service.name }}-service"
       port: {{ .Values.service.targetport }}
   tls:
     secretName: {{ .Values.ingress.tls }}
