@@ -11,5 +11,7 @@ ingress:
   tls: durpapi-tls
 
 service:
+  name: durpapi
   type: ClusterIP
   port: 8080
+  targetport: 80

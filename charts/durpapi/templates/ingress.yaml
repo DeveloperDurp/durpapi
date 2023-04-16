@@ -1,23 +1,54 @@
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: durpapi-ingress
+#  annotations:
+#    kubernetes.io/ingress.class: nginx
+#    cert-manager.io/cluster-issuer: {{ .Values.ingress.clusterissuer }}
+#spec:
+#  rules:
+#  - host: {{ .Values.ingress.host }}
+#    http:
+#      paths:
+#      - path: /
+#        pathType: Prefix
+#        backend:
+#          service:
+#            name: durpapi
+#            port: 
+#              number: 80         
+#  tls:
+#    - hosts: 
+#      - {{ .Values.ingress.host }}
+#      secretName: {{ .Values.ingress.tls }}
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
   name: durpapi-ingress
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    cert-manager.io/cluster-issuer: {{ .Values.ingress.clusterissuer }}
 spec:
-  rules:
-  - host: {{ .Values.ingress.host }}
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: durpapi
-            port: 
-              number: 80         
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host("{{ .Values.ingress.host }}") && PathPrefix(`/`)
+    kind: Rule
+    services:
+    - name: {{ .Values.service.name }}
+      port: {{ .Values.service.targetport }}
   tls:
-    - hosts: 
-      - {{ .Values.ingress.host }}
-      secretName: {{ .Values.ingress.tls }}
+    secretName: {{ .Values.ingress.tls }}
+
+---
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .Values.ingress.tls }}
+spec:
+  secretName: {{ .Values.ingress.tls }}
+  issuerRef:
+    name: {{ .Values.ingress.clusterissuer }}
+    kind: ClusterIssuer
+  commonName: {{ .Values.ingress.host }}
+  dnsNames:
+  - {{ .Values.ingress.host }}
