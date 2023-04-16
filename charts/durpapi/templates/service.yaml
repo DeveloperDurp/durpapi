@@ -9,4 +9,4 @@ spec:
     targetPort: {{ .Values.service.targetport }}
     protocol: TCP
   selector:
-    app: {{ .Values.service.name }}
+    app: {{ .Chart.Name }}
