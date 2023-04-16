@@ -21,7 +21,7 @@ spec:
         imagePullPolicy: {{ .Values.deployment.imagePullPolicy }}       
         ports:
         - name: http
-          containerPort: {{ .Values.service.port }}
+          containerPort: {{ .Values.service.targetport }}
         envFrom:
         - secretRef:
             name: {{ .Values.deployment.secretfile }} 

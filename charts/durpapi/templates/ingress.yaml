@@ -10,7 +10,7 @@ spec:
     kind: Rule
     services:
     - name: {{ .Chart.Name }}-service
-      port: {{ .Values.service.targetport }}
+      port: {{ .Values.service.port }}
   tls:
     secretName: {{ .Values.ingress.tls }}
 
