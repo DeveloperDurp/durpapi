@@ -51,7 +51,7 @@ func main() {
 		}
 		unraid := v1.Group("/unraid")
 		{
-			unraid.Use(authMiddleware())
+			//unraid.Use(authMiddleware())
 			unraid.GET("powerusage", c.UnraidPowerUsage)
 		}
 	}

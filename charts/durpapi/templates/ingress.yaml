@@ -14,6 +14,11 @@ spec:
     services:
     - name: {{ .Chart.Name }}-service
       port: {{ .Values.service.port }}
+  - match: Host("{{ .Values.ingress.host }}") && PathPrefix(`/swagger/index.html`)
+    kind: Rule
+    services:
+    - name: {{ .Chart.Name }}-service
+      port: {{ .Values.service.port }}
   tls:
     secretName: {{ .Values.ingress.tls }}
 
