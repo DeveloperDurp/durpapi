@@ -45,7 +45,7 @@ func main() {
 		}
 		openai := v1.Group("/openai")
 		{
-			openai.Use(authMiddleware())
+			//openai.Use(authMiddleware())
 			openai.GET("general", c.GeneralOpenAI)
 			openai.GET("travelagent", c.TravelAgentOpenAI)
 		}
