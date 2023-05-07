@@ -11,7 +11,7 @@ WORKDIR /app
 COPY . .
 
 # Run swag init to generate Swagger documentation
-RUN go install && go install github.com/swaggo/swag/cmd/swag@latest && swag init
+RUN go install && go install github.com/swaggo/swag/cmd/swag@v1.8.12 && swag init
 
 # Build the Go application inside the container
 RUN go build -o main .
