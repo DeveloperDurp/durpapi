@@ -34,21 +34,24 @@ func main() {
 
 	r := gin.Default()
 	c := controller.NewController()
+	var groups []string
 
 	v1 := r.Group("/api/v1")
 	{
-		token := v1.Group("/token")
+		health := v1.Group("/health")
 		{
-			token.GET("generateTokenHandler", c.GenerateTokenHandler)
+			health.GET("getHealth", c.GetHealth)
 		}
 		openai := v1.Group("/openai")
 		{
+			groups = []string{"durpapi"}
+			openai.Use(authMiddleware(groups))
 			openai.GET("general", c.GeneralOpenAI)
 			openai.GET("travelagent", c.TravelAgentOpenAI)
 		}
 		unraid := v1.Group("/unraid")
 		{
-			groups := []string{"grafana"}
+			groups = []string{"durpapi"}
 			unraid.Use(authMiddleware(groups))
 			unraid.GET("powerusage", c.UnraidPowerUsage)
 		}
@@ -60,12 +63,12 @@ func main() {
 func authMiddleware(allowedGroups []string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Get the user groups from the request headers
-		groupsHeader := c.GetHeader("X-authentik-groups")
+		groupsHeader := c.GetHeader("X-Forwarded-Groups")
 
 		// Split the groups header value into individual groups
-		groups := strings.Split(groupsHeader, "|")
+		groups := strings.Split(groupsHeader, ",")
 
-		// Check if the user belongs to any of the allowed groups
+		// Check if the user belongs to any of the allowed grouzps
 		isAllowed := false
 		for _, allowedGroup := range allowedGroups {
 			for _, group := range groups {

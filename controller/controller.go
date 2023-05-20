@@ -12,7 +12,6 @@ type Controller struct {
 	openaiClient *openai.Client
 	unraidAPIKey string
 	unraidURI    string
-	jwtToken     string
 
 	config *configStruct
 }
@@ -30,7 +29,6 @@ func NewController() *Controller {
 	openaiClient := openai.NewClient(openaiApiKey)
 	unraidAPIKey := os.Getenv("UNRAID_API_KEY")
 	unraidURI := os.Getenv("UNRAID_URI")
-	jwtToken := os.Getenv("jwtToken")
 
 	if err != nil {
 		fmt.Println(err.Error())
@@ -40,7 +38,6 @@ func NewController() *Controller {
 		openaiClient: openaiClient,
 		unraidAPIKey: unraidAPIKey,
 		unraidURI:    unraidURI,
-		jwtToken:     jwtToken,
 	}
 }
 

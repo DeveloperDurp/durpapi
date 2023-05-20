@@ -1,11 +1,11 @@
 basePath: /api/v1
-host: localhost:8080
+host: durpapi.durp.info
 info:
   contact:
     email: support@swagger.io
     name: API Support
     url: http://www.swagger.io/support
-  description: This is a sample server celler server.
+  description: API for Durp's needs
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
@@ -13,6 +13,21 @@ info:
   title: DurpAPI
   version: "1.0"
 paths:
+  /health/getHealth:
+    get:
+      consumes:
+      - application/json
+      description: Get the health of the API
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response
+          schema:
+            type: string
+      summary: Generate Health status
+      tags:
+      - health
   /openai/general:
     get:
       consumes:
@@ -55,27 +70,6 @@ paths:
       summary: Travel Agent ChatGPT
       tags:
       - openai
-  /token/generateTokenHandler:
-    get:
-      consumes:
-      - application/json
-      description: Gets the PSU Data from unraid
-      parameters:
-      - description: Secret Token
-        in: query
-        name: token
-        required: true
-        type: string
-      produces:
-      - text/plain
-      responses:
-        "200":
-          description: response
-          schema:
-            type: string
-      summary: Generate JWT Token
-      tags:
-      - token
   /unraid/powerusage:
     get:
       consumes:

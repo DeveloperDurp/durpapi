@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample server celler server.",
+        "description": "API for Durp's needs",
         "title": "DurpAPI",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
@@ -15,9 +15,32 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8080",
+    "host": "durpapi.durp.info",
     "basePath": "/api/v1",
     "paths": {
+        "/health/getHealth": {
+            "get": {
+                "description": "Get the health of the API",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "health"
+                ],
+                "summary": "Generate Health status",
+                "responses": {
+                    "200": {
+                        "description": "response",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/openai/general": {
             "get": {
                 "description": "Ask ChatGPT a general question",
@@ -68,38 +91,6 @@
                         "type": "string",
                         "description": "Ask ChatGPT for suggestions as a travel agent",
                         "name": "message",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "response",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/token/generateTokenHandler": {
-            "get": {
-                "description": "Gets the PSU Data from unraid",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "token"
-                ],
-                "summary": "Generate JWT Token",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Secret Token",
-                        "name": "token",
                         "in": "query",
                         "required": true
                     }

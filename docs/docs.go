@@ -25,6 +25,29 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/health/getHealth": {
+            "get": {
+                "description": "Get the health of the API",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "health"
+                ],
+                "summary": "Generate Health status",
+                "responses": {
+                    "200": {
+                        "description": "response",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/openai/general": {
             "get": {
                 "description": "Ask ChatGPT a general question",
@@ -89,38 +112,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/token/generateTokenHandler": {
-            "get": {
-                "description": "Gets the PSU Data from unraid",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "token"
-                ],
-                "summary": "Generate JWT Token",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Secret Token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "response",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/unraid/powerusage": {
             "get": {
                 "description": "Gets the PSU Data from unraid",
@@ -157,11 +148,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8080",
+	Host:             "durpapi.durp.info",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "DurpAPI",
-	Description:      "This is a sample server celler server.",
+	Description:      "API for Durp's needs",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }
