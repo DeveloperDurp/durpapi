@@ -63,7 +63,7 @@ func authMiddleware(allowedGroups []string) gin.HandlerFunc {
 		groupsHeader := c.GetHeader("X-authentik-groups")
 
 		// Split the groups header value into individual groups
-		groups := strings.Split(groupsHeader, ",")
+		groups := strings.Split(groupsHeader, "|")
 
 		// Check if the user belongs to any of the allowed groups
 		isAllowed := false
