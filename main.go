@@ -86,7 +86,7 @@ func authMiddleware(allowedGroups []string) gin.HandlerFunc {
 		if !isAllowed {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"message": "Unauthorized access",
-				"groups":  groupsHeader,
+				"groups":  allowedGroups,
 			})
 			return
 		}

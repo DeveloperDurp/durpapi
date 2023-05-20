@@ -9,7 +9,7 @@ spec:
   selector:
     matchLabels:
       app: {{ .Chart.Name }}
-  replicas: {{ .Values.deployment.replicas }}
+  replicas: {{ .Values.deployment.hpa.minReplicas }}
   template:
     metadata:
       labels:
@@ -25,3 +25,9 @@ spec:
         envFrom:
         - secretRef:
             name: {{ .Values.deployment.secretfile }} 
+        resources:
+          requests:
+            memory: {{ .Values.deployment.resources.requests.cpu }} 
+            cpu: {{ .Values.deployment.resources.requests.memory }} 
+          limits:
+            memory: {{ .Values.deployment.resources.limits.memory }} 
