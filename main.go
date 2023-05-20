@@ -2,10 +2,8 @@ package main
 
 import (
 	"net/http"
-	"os"
 	"strings"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -15,7 +13,7 @@ import (
 
 //	@title			DurpAPI
 //	@version		1.0
-//	@description	This is a sample server celler server.
+//	@description	API for Durp's needs
 //	@termsOfService	http://swagger.io/terms/
 
 //	@contact.name	API Support
@@ -45,13 +43,13 @@ func main() {
 		}
 		openai := v1.Group("/openai")
 		{
-			openai.Use(authMiddleware("test"))
 			openai.GET("general", c.GeneralOpenAI)
 			openai.GET("travelagent", c.TravelAgentOpenAI)
 		}
 		unraid := v1.Group("/unraid")
 		{
-			unraid.Use(authMiddleware("grafana"))
+      groups := []string{"grafana"}
+			unraid.Use(authMiddleware(groups))
 			unraid.GET("powerusage", c.UnraidPowerUsage)
 		}
 	}
