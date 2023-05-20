@@ -63,12 +63,12 @@ func main() {
 func authMiddleware(allowedGroups []string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Get the user groups from the request headers
-		groupsHeader := c.GetHeader("X-Forwarded-Groups")
+		groupsHeader := c.GetHeader("X-authentik-groups")
 
 		// Split the groups header value into individual groups
-		groups := strings.Split(groupsHeader, ",")
+		groups := strings.Split(groupsHeader, "|")
 
-		// Check if the user belongs to any of the allowed grouzps
+		// Check if the user belongs to any of the allowed groups
 		isAllowed := false
 		for _, allowedGroup := range allowedGroups {
 			for _, group := range groups {
