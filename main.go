@@ -44,14 +44,14 @@ func main() {
 		}
 		openai := v1.Group("/openai")
 		{
-			groups = []string{"durpapi"}
+			groups = []string{"openai"}
 			openai.Use(authMiddleware(groups))
 			openai.GET("general", c.GeneralOpenAI)
 			openai.GET("travelagent", c.TravelAgentOpenAI)
 		}
 		unraid := v1.Group("/unraid")
 		{
-			groups = []string{"durpapi"}
+			groups = []string{"unraid"}
 			unraid.Use(authMiddleware(groups))
 			unraid.GET("powerusage", c.UnraidPowerUsage)
 		}
