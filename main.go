@@ -48,7 +48,7 @@ func main() {
 		}
 		unraid := v1.Group("/unraid")
 		{
-      groups := []string{"grafana"}
+			groups := []string{"grafana"}
 			unraid.Use(authMiddleware(groups))
 			unraid.GET("powerusage", c.UnraidPowerUsage)
 		}
@@ -60,7 +60,7 @@ func main() {
 func authMiddleware(allowedGroups []string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Get the user groups from the request headers
-		groupsHeader := c.GetHeader("X-Forwarded-Groups")
+		groupsHeader := c.GetHeader("X-authentik-groups")
 
 		// Split the groups header value into individual groups
 		groups := strings.Split(groupsHeader, ",")
@@ -82,9 +82,9 @@ func authMiddleware(allowedGroups []string) gin.HandlerFunc {
 		// If the user is not in any of the allowed groups, respond with unauthorized access
 		if !isAllowed {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-        "message": "Unauthorized access",
-        "groups": groupsHeader,
-      })
+				"message": "Unauthorized access",
+				"groups":  groupsHeader,
+			})
 			return
 		}
 
