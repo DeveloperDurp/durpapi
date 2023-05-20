@@ -81,7 +81,10 @@ func authMiddleware(allowedGroups []string) gin.HandlerFunc {
 
 		// If the user is not in any of the allowed groups, respond with unauthorized access
 		if !isAllowed {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Unauthorized access"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+        "message": "Unauthorized access",
+        "groups": groupsHeader,
+      })
 			return
 		}
 
