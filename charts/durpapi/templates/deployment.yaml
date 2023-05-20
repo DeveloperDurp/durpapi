@@ -18,8 +18,7 @@ spec:
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.deployment.image }}:{{ default .Chart.Version .Values.deployment.tag }}"
-        imagePullPolicy: {{ .Values.deployment.imagePullPolicy }}  
-        revisionHistoryLimit: 1     
+        imagePullPolicy: {{ .Values.deployment.imagePullPolicy }}   
         readinessProbe:
           httpGet:
             path: /api/v1/health/getHealth
