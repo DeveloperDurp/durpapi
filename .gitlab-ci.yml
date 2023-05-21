@@ -2,6 +2,3 @@ include:
   - project: 'developerdurp/yml'
     ref: main
     file: 'pipelines/golang.yml'
-
-variables:
-  GIN_MODE: release    

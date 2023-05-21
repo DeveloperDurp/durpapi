@@ -13,15 +13,10 @@ RUN adduser \
 "durp"
 
 WORKDIR /app
-COPY . .
+COPY ./output/* .
 RUN chown -R durp /app
 
 USER durp
-
-ENV GOPATH /go
-ENV PATH $PATH:$GOPATH/bin
-
+ENV GIN_MODE=release
 EXPOSE 8080
-
-# Run the application
 CMD ["./main"]
