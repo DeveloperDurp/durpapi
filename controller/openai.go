@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -23,7 +24,10 @@ func (c *Controller) GeneralOpenAI(ctx *gin.Context) {
 
 	result, err := createChatCompletion(c, message)
 	if err != nil {
-		ctx.AbortWithError(http.StatusInternalServerError, err)
+		err := ctx.AbortWithError(http.StatusInternalServerError, err)
+		if err != nil {
+			fmt.Println("Failed to send message")
+		}
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"message": result})
@@ -44,7 +48,10 @@ func (c *Controller) TravelAgentOpenAI(ctx *gin.Context) {
 
 	result, err := createChatCompletion(c, message)
 	if err != nil {
-		ctx.AbortWithError(http.StatusInternalServerError, err)
+		err := ctx.AbortWithError(http.StatusInternalServerError, err)
+		if err != nil {
+			fmt.Println("Failed to send message")
+		}
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"message": result})

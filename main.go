@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -57,7 +58,10 @@ func main() {
 		}
 	}
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	r.Run(":8080")
+	err := r.Run(":8080")
+	if err != nil {
+		fmt.Println("Failed to start server")
+	}
 }
 
 func authMiddleware(allowedGroups []string) gin.HandlerFunc {
