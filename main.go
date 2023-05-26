@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -65,12 +66,20 @@ func main() {
 }
 
 func authMiddleware(allowedGroups []string) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// Get the user groups from the request headers
-		groupsHeader := c.GetHeader("X-authentik-groups")
 
-		// Split the groups header value into individual groups
-		groups := strings.Split(groupsHeader, "|")
+	return func(c *gin.Context) {
+
+		var groups []string
+		groupsenv := os.Getenv("groups")
+		if groupsenv != "" {
+			groups = strings.Split(groupsenv, ",")
+		} else {
+			// Get the user groups from the request headers
+			groupsHeader := c.GetHeader("X-authentik-groups")
+
+			// Split the groups header value into individual groups
+			groups = strings.Split(groupsHeader, "|")
+		}
 
 		// Check if the user belongs to any of the allowed groups
 		isAllowed := false
