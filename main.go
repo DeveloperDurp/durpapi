@@ -103,8 +103,8 @@ func authMiddleware(groups []string) gin.HandlerFunc {
 		}
 
 		// Add the token to the request context for later use
-		ctx := context.WithValue(c.Request.Context(), "token", token)
-		c.Request = c.Request.WithContext(ctx)
+		//ctx := context.WithValue(c.Request.Context(), "token", token)
+		//c.Request = c.Request.WithContext(ctx)
 
 		// Call the next handler
 		c.Next()
