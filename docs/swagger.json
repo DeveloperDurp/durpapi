@@ -15,7 +15,7 @@
         },
         "version": "1.0"
     },
-    "host": "durpapi.durp.info",
+    "host": "localhost:8080",
     "basePath": "/api/v1",
     "paths": {
         "/health/getHealth": {
@@ -95,6 +95,29 @@
                         "required": true
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "response",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/token/GenerateToken": {
+            "get": {
+                "description": "Get the health of the API",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "token"
+                ],
+                "summary": "Generate Health status",
                 "responses": {
                     "200": {
                         "description": "response",

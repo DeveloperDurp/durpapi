@@ -1,16 +1,16 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
-	"os"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"gitlab.com/DeveloperDurp/DurpAPI/controller"
 	_ "gitlab.com/DeveloperDurp/DurpAPI/docs"
+	"golang.org/x/oauth2"
 )
 
 //	@title			DurpAPI
@@ -37,12 +37,29 @@ func main() {
 	r := gin.Default()
 	c := controller.NewController()
 	var groups []string
+	conf := &oauth2.Config{
+		ClientID:     c.ClientID,
+		ClientSecret: c.ClientSecret,
+		RedirectURL:  c.RedirectURL,
+		Scopes: []string{
+			"email",
+			"groups",
+		},
+		Endpoint: oauth2.Endpoint{
+			AuthURL:  c.AuthURL,
+			TokenURL: c.TokenURL,
+		},
+	}
 
 	v1 := r.Group("/api/v1")
 	{
 		health := v1.Group("/health")
 		{
 			health.GET("getHealth", c.GetHealth)
+		}
+		token := v1.Group("/token")
+		{
+			token.GET("GenerateToken", c.GenerateToken(conf))
 		}
 		openai := v1.Group("/openai")
 		{
@@ -59,52 +76,62 @@ func main() {
 		}
 	}
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.GET("/callback", CallbackHandler(conf))
+
 	err := r.Run(":8080")
 	if err != nil {
 		fmt.Println("Failed to start server")
 	}
 }
 
-func authMiddleware(allowedGroups []string) gin.HandlerFunc {
+func authMiddleware(groups []string) gin.HandlerFunc {
 
 	return func(c *gin.Context) {
-
-		var groups []string
-		groupsenv := os.Getenv("groups")
-		if groupsenv != "" {
-			groups = strings.Split(groupsenv, ",")
-		} else {
-			// Get the user groups from the request headers
-			groupsHeader := c.GetHeader("X-authentik-groups")
-
-			// Split the groups header value into individual groups
-			groups = strings.Split(groupsHeader, "|")
+		// Get the access token from the request header or query parameters
+		accessToken := c.GetHeader("Authorization")
+		if accessToken == "" {
+			accessToken = c.Query("access_token")
 		}
 
-		// Check if the user belongs to any of the allowed groups
-		isAllowed := false
-		for _, allowedGroup := range allowedGroups {
-			for _, group := range groups {
-				if group == allowedGroup {
-					isAllowed = true
-					break
-				}
-			}
-			if isAllowed {
-				break
-			}
-		}
+		// Create an OAuth2 token from the access token
+		token := &oauth2.Token{AccessToken: accessToken}
 
-		// If the user is not in any of the allowed groups, respond with unauthorized access
-		if !isAllowed {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-				"message": "Unauthorized access",
-				"groups":  groups,
-			})
+		// Validate the token
+		if !token.Valid() {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 			return
 		}
 
+		// Add the token to the request context for later use
+		ctx := context.WithValue(c.Request.Context(), "token", token)
+		c.Request = c.Request.WithContext(ctx)
+
 		// Call the next handler
 		c.Next()
+	}
+}
+
+// CallbackHandler receives the authorization code and exchanges it for a token
+func CallbackHandler(conf *oauth2.Config) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Get the authorization code from the query parameters
+		code := c.Query("code")
+
+		// Exchange the authorization code for a token
+		token, err := conf.Exchange(context.Background(), code)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to exchange authorization code"})
+			return
+		}
+
+		// Create a response JSON
+		response := gin.H{
+			"access_token":  token.AccessToken,
+			"token_type":    token.TokenType,
+			"refresh_token": token.RefreshToken,
+			"expiry":        token.Expiry,
+		}
+
+		c.JSON(http.StatusOK, response)
 	}
 }

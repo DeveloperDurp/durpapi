@@ -112,6 +112,29 @@ const docTemplate = `{
                 }
             }
         },
+        "/token/GenerateToken": {
+            "get": {
+                "description": "Get the health of the API",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "token"
+                ],
+                "summary": "Generate Health status",
+                "responses": {
+                    "200": {
+                        "description": "response",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/unraid/powerusage": {
             "get": {
                 "description": "Gets the PSU Data from unraid",
@@ -148,7 +171,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "durpapi.durp.info",
+	Host:             "localhost:8080",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "DurpAPI",
