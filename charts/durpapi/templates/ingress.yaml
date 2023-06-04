@@ -11,6 +11,14 @@ spec:
     services:
     - name: "{{ .Chart.Name }}-service"
       port: {{ .Values.service.port }}
+  - match: Host("{{ .Values.ingress.host }}") && PathPrefix(`/api`)
+    middlewares:
+    - name: authentik-proxy-provider
+      namespace: traefik
+    kind: Rule
+    services:
+    - name: "{{ .Chart.Name }}-service"
+      port: {{ .Values.service.port }}      
   tls:
     secretName: {{ .Values.ingress.tls }}
 
