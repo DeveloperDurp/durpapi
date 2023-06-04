@@ -11,6 +11,7 @@ require (
 )
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 )

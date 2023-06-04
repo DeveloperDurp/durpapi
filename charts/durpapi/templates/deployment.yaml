@@ -34,6 +34,11 @@ spec:
         ports:
         - name: http
           containerPort: {{ .Values.service.targetport }}
+        env:
+          - name: host
+            value: {{ .Values.ingress.host }}
+          - name: version
+            value: {{ default .Chart.Version .Values.deployment.tag }}
         envFrom:
         - secretRef:
             name: {{ .Values.deployment.secretfile }} 

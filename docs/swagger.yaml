@@ -1,5 +1,4 @@
 basePath: /api/v1
-host: durpapi.durp.info
 info:
   contact:
     email: support@swagger.io
@@ -11,7 +10,6 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://swagger.io/terms/
   title: DurpAPI
-  version: "1.0"
 paths:
   /health/getHealth:
     get:

@@ -1,7 +1,7 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ .Chart.Name }}-ingress
+  name: "{{ .Chart.Name }}-ingress"
 spec:
   entryPoints:
     - websecure
@@ -9,7 +9,7 @@ spec:
   - match: Host("{{ .Values.ingress.host }}") && PathPrefix(`/`)
     kind: Rule
     services:
-    - name: {{ .Chart.Name }}-service
+    - name: "{{ .Chart.Name }}-service"
       port: {{ .Values.service.port }}
   tls:
     secretName: {{ .Values.ingress.tls }}
