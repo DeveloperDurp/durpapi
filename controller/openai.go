@@ -15,9 +15,10 @@ import (
 //	@Description	Ask ChatGPT a general question
 //	@Tags			openai
 //	@Accept			json
-//	@Produce		plain
+//	@Produce		application/json
 //	@Param			message	query		string		true	"Ask ChatGPT a general question"
-//	@Success		200	{string}	string	"response"
+//	@Success		200	{object}	model.Message	"response"
+//	@failure		400 {object}	model.Message	"error"
 //	@Router			/openai/general [get]
 func (c *Controller) GeneralOpenAI(ctx *gin.Context) {
 	message := ctx.Query("message")
@@ -39,9 +40,10 @@ func (c *Controller) GeneralOpenAI(ctx *gin.Context) {
 //	@Description	Ask ChatGPT for suggestions as if it was a travel agent
 //	@Tags			openai
 //	@Accept			json
-//	@Produce		plain
+//	@Produce		application/json
 //	@Param			message	query		string		true	"Ask ChatGPT for suggestions as a travel agent"
-//	@Success		200	{string}	string	"response"
+//	@Success		200	{object}	model.Message	"response"
+//	@failure		400 {object}	model.Message	"error"
 //	@Router			/openai/travelagent [get]
 func (c *Controller) TravelAgentOpenAI(ctx *gin.Context) {
 	message := "I want you to act as a travel guide. I will give you my location and you will give me suggestions. " + ctx.Query("message")

@@ -13,4 +13,5 @@ var (
 	TokenURL     = os.Getenv("TokenURL")
 	Host         = os.Getenv("host")
 	Version      = os.Getenv("version")
+	Groupsenv    = os.Getenv("groups")
 )

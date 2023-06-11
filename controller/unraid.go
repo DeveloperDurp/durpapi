@@ -3,13 +3,18 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"gitlab.com/DeveloperDurp/DurpAPI/model"
+)
+
+var (
+	unraidAPIKey = model.UnraidAPIKey
+	UnraidURI    = model.UnraidURI
 )
 
 // UnraidPowerUsage godoc
@@ -19,29 +24,27 @@ import (
 //	@Tags			unraid
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{string}	string	"response"
+//	@Success		200	{object}	model.PowerSupply	"response"
+//	@failure		412 {object}	model.Message	"error"
 //	@Router			/unraid/powerusage [get]
 func (c *Controller) UnraidPowerUsage(ctx *gin.Context) {
 
-	// Create a cookie jar to hold cookies for the session
 	jar, err := cookiejar.New(nil)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	// Create an HTTP client with the cookie jar
 	client := &http.Client{
 		Jar: jar,
 	}
 
 	form := url.Values{
 		"username": {"root"},
-		"password": {c.unraidAPIKey},
+		"password": {unraidAPIKey},
 	}
 
-	// Login to unraid
-	req, err := http.NewRequest("POST", "https://"+c.unraidURI+"/login", strings.NewReader(form.Encode()))
+	req, err := http.NewRequest("POST", "https://"+UnraidURI+"/login", strings.NewReader(form.Encode()))
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -54,14 +57,12 @@ func (c *Controller) UnraidPowerUsage(ctx *gin.Context) {
 	}
 	defer resp.Body.Close()
 
-	// Check if the login was successful by inspecting the response body or headers
 	if resp.StatusCode != http.StatusOK {
 		fmt.Println("Login failed!")
 		return
 	}
 
-	// Now you can use the client to send authenticated requests to other endpoints
-	req, err = http.NewRequest("GET", "https://"+c.unraidURI+"/plugins/corsairpsu/status.php", nil)
+	req, err = http.NewRequest("GET", "https://"+UnraidURI+"/plugins/corsairpsu/status.php", nil)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -75,10 +76,11 @@ func (c *Controller) UnraidPowerUsage(ctx *gin.Context) {
 
 	defer resp.Body.Close()
 
-	// Convert the returned data to JSON
 	var responseJSON map[string]interface{}
 	if err := json.NewDecoder(resp.Body).Decode(&responseJSON); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		ctx.JSON(http.StatusPreconditionFailed, gin.H{"message": "Bad Response from Unraid"})
+		return
 	}
 
 	ctx.JSON(http.StatusOK, responseJSON)

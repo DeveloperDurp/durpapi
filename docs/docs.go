@@ -13,8 +13,8 @@ const docTemplate = `{
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
             "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
+            "url": "https://durp.info",
+            "email": "developerdurp@durp.info"
         },
         "license": {
             "name": "Apache 2.0",
@@ -42,7 +42,13 @@ const docTemplate = `{
                     "200": {
                         "description": "response",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/model.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/model.Message"
                         }
                     }
                 }
@@ -55,7 +61,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "produces": [
-                    "text/plain"
+                    "application/json"
                 ],
                 "tags": [
                     "openai"
@@ -74,7 +80,13 @@ const docTemplate = `{
                     "200": {
                         "description": "response",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/model.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/model.Message"
                         }
                     }
                 }
@@ -87,7 +99,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "produces": [
-                    "text/plain"
+                    "application/json"
                 ],
                 "tags": [
                     "openai"
@@ -106,30 +118,13 @@ const docTemplate = `{
                     "200": {
                         "description": "response",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/model.Message"
                         }
-                    }
-                }
-            }
-        },
-        "/token/GenerateToken": {
-            "get": {
-                "description": "Get the health of the API",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "token"
-                ],
-                "summary": "Generate Health status",
-                "responses": {
-                    "200": {
-                        "description": "response",
+                    },
+                    "400": {
+                        "description": "error",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/model.Message"
                         }
                     }
                 }
@@ -152,18 +147,90 @@ const docTemplate = `{
                     "200": {
                         "description": "response",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/model.PowerSupply"
+                        }
+                    },
+                    "412": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/model.Message"
                         }
                     }
                 }
             }
         }
     },
-    "securityDefinitions": {
-        "ApiKeyAuth": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
+    "definitions": {
+        "model.Message": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "message"
+                }
+            }
+        },
+        "model.PowerSupply": {
+            "type": "object",
+            "properties": {
+                "12v_load": {
+                    "type": "integer"
+                },
+                "12v_watts": {
+                    "type": "integer"
+                },
+                "3v_load": {
+                    "type": "integer"
+                },
+                "3v_watts": {
+                    "type": "integer"
+                },
+                "5v_load": {
+                    "type": "integer"
+                },
+                "5v_watts": {
+                    "type": "integer"
+                },
+                "capacity": {
+                    "type": "string"
+                },
+                "efficiency": {
+                    "type": "integer"
+                },
+                "fan_rpm": {
+                    "type": "integer"
+                },
+                "load": {
+                    "type": "integer"
+                },
+                "poweredon": {
+                    "type": "string"
+                },
+                "poweredon_raw": {
+                    "type": "string"
+                },
+                "product": {
+                    "type": "string"
+                },
+                "temp1": {
+                    "type": "integer"
+                },
+                "temp2": {
+                    "type": "integer"
+                },
+                "uptime": {
+                    "type": "string"
+                },
+                "uptime_raw": {
+                    "type": "string"
+                },
+                "vendor": {
+                    "type": "string"
+                },
+                "watts": {
+                    "type": "integer"
+                }
+            }
         }
     }
 }`

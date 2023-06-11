@@ -39,7 +39,3 @@ func NewController() *Controller {
 		TokenURL:     TokenURL,
 	}
 }
-
-type Message struct {
-	Message string `json:"message" example:"message"`
-}
