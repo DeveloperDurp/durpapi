@@ -18,5 +18,6 @@ import (
 //	@Router			/health/getHealth [get]
 func (c *Controller) GetHealth(ctx *gin.Context) {
 	// Return the health in the response body
-	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})
+  ctx.JSON(http.StatusOK, gin.H{"message": "OK"})
 }
+

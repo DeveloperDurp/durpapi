@@ -9,6 +9,10 @@ import (
 	openai "github.com/sashabaranov/go-openai"
 )
 
+type ChatRequest struct {
+  Message string `json:"message"`
+}
+
 // GeneralOpenAI godoc
 //
 //	@Summary		Gerneral ChatGPT
@@ -18,12 +22,17 @@ import (
 //	@Produce		application/json
 //	@Param			message	query		string		true	"Ask ChatGPT a general question"
 //	@Success		200	{object}	model.Message	"response"
-//	@failure		400 {object}	model.Message	"error"
+//@failure		400 {object}	model.Message	"error"
 //	@Router			/openai/general [get]
 func (c *Controller) GeneralOpenAI(ctx *gin.Context) {
-	message := ctx.Query("message")
 
-	result, err := createChatCompletion(c, message)
+  var req ChatRequest
+
+  if err := ctx.ShouldBindJSON(&req); err != nil {
+    req.Message = ctx.Query("message")
+  }
+
+	result, err := createChatCompletion(c, req.Message)
 	if err != nil {
 		err := ctx.AbortWithError(http.StatusInternalServerError, err)
 		if err != nil {
