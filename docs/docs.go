@@ -54,6 +54,35 @@ const docTemplate = `{
                 }
             }
         },
+        "/jokes/dadjoke": {
+            "get": {
+                "description": "get a dad joke",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DadJoke"
+                ],
+                "summary": "Generate dadjoke",
+                "responses": {
+                    "200": {
+                        "description": "response",
+                        "schema": {
+                            "$ref": "#/definitions/model.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/model.Message"
+                        }
+                    }
+                }
+            }
+        },
         "/openai/general": {
             "get": {
                 "description": "Ask ChatGPT a general question",

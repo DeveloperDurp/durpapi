@@ -2,21 +2,13 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+
 	"gitlab.com/DeveloperDurp/DurpAPI/controller"
 	"gitlab.com/DeveloperDurp/DurpAPI/docs"
-	"gitlab.com/DeveloperDurp/DurpAPI/model"
-)
-
-var (
-	host      = model.Host
-	version   = model.Version
-	groupsenv = model.Groupsenv
 )
 
 //	@title			DurpAPI
@@ -33,11 +25,11 @@ var (
 //	@BasePath	/api/v1
 
 func main() {
-
 	r := gin.Default()
 	c := controller.NewController()
-	docs.SwaggerInfo.Host = host
-	docs.SwaggerInfo.Version = version
+
+	docs.SwaggerInfo.Host = c.Cfg.Host
+	docs.SwaggerInfo.Version = c.Cfg.Version
 
 	v1 := r.Group("/api/v1")
 	{
@@ -45,15 +37,19 @@ func main() {
 		{
 			health.GET("getHealth", c.GetHealth)
 		}
+		jokes := v1.Group("/jokes")
+		{
+			jokes.GET("dadjoke", c.GetDadJoke)
+		}
 		openai := v1.Group("/openai")
 		{
-			openai.Use(authMiddleware([]string{"openai"}))
+			openai.Use(c.AuthMiddleware([]string{"openai"}, c.Cfg.Groupsenv))
 			openai.GET("general", c.GeneralOpenAI)
 			openai.GET("travelagent", c.TravelAgentOpenAI)
 		}
 		unraid := v1.Group("/unraid")
 		{
-			unraid.Use(authMiddleware([]string{"unraid"}))
+			openai.Use(c.AuthMiddleware([]string{"unraid"}, c.Cfg.Groupsenv))
 			unraid.GET("powerusage", c.UnraidPowerUsage)
 		}
 	}
@@ -62,49 +58,5 @@ func main() {
 	err := r.Run(":8080")
 	if err != nil {
 		fmt.Println("Failed to start server")
-	}
-}
-
-func authMiddleware(allowedGroups []string) gin.HandlerFunc {
-
-	return func(c *gin.Context) {
-
-		var groups []string
-
-		if groupsenv != "" {
-			groups = strings.Split(groupsenv, ",")
-		} else {
-			// Get the user groups from the request headers
-			groupsHeader := c.GetHeader("X-authentik-groups")
-
-			// Split the groups header value into individual groups
-			groups = strings.Split(groupsHeader, "|")
-		}
-
-		// Check if the user belongs to any of the allowed groups
-		isAllowed := false
-		for _, allowedGroup := range allowedGroups {
-			for _, group := range groups {
-				if group == allowedGroup {
-					isAllowed = true
-					break
-				}
-			}
-			if isAllowed {
-				break
-			}
-		}
-
-		// If the user is not in any of the allowed groups, respond with unauthorized access
-		if !isAllowed {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-				"message": "Unauthorized access",
-				"groups":  groups,
-			})
-			return
-		}
-
-		// Call the next handler
-		c.Next()
 	}
 }

@@ -10,7 +10,7 @@ import (
 )
 
 type ChatRequest struct {
-  Message string `json:"message"`
+	Message string `json:"message"`
 }
 
 // GeneralOpenAI godoc
@@ -22,17 +22,18 @@ type ChatRequest struct {
 //	@Produce		application/json
 //	@Param			message	query		string		true	"Ask ChatGPT a general question"
 //	@Success		200	{object}	model.Message	"response"
-//@failure		400 {object}	model.Message	"error"
+//
+// @failure		400 {object}	model.Message	"error"
+//
 //	@Router			/openai/general [get]
 func (c *Controller) GeneralOpenAI(ctx *gin.Context) {
+	var req ChatRequest
 
-  var req ChatRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		req.Message = ctx.Query("message")
+	}
 
-  if err := ctx.ShouldBindJSON(&req); err != nil {
-    req.Message = ctx.Query("message")
-  }
-
-	result, err := createChatCompletion(c, req.Message)
+	result, err := c.createChatCompletion(req.Message)
 	if err != nil {
 		err := ctx.AbortWithError(http.StatusInternalServerError, err)
 		if err != nil {
@@ -55,9 +56,14 @@ func (c *Controller) GeneralOpenAI(ctx *gin.Context) {
 //	@failure		400 {object}	model.Message	"error"
 //	@Router			/openai/travelagent [get]
 func (c *Controller) TravelAgentOpenAI(ctx *gin.Context) {
-	message := "I want you to act as a travel guide. I will give you my location and you will give me suggestions. " + ctx.Query("message")
+	var req ChatRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		req.Message = ctx.Query("message")
+	}
 
-	result, err := createChatCompletion(c, message)
+	req.Message = "I want you to act as a travel guide. I will give you my location and you will give me suggestions. " + req.Message
+
+	result, err := c.createChatCompletion(req.Message)
 	if err != nil {
 		err := ctx.AbortWithError(http.StatusInternalServerError, err)
 		if err != nil {
@@ -68,9 +74,8 @@ func (c *Controller) TravelAgentOpenAI(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": result})
 }
 
-func createChatCompletion(c *Controller, message string) (string, error) {
-
-	var client = c.openaiClient
+func (c *Controller) createChatCompletion(message string) (string, error) {
+	client := c.Cfg.OpenaiClient
 	resp, err := client.CreateChatCompletion(
 		context.Background(),
 		openai.ChatCompletionRequest{

@@ -78,6 +78,25 @@ paths:
       summary: Generate Health status
       tags:
       - health
+  /jokes/dadjoke:
+    get:
+      consumes:
+      - application/json
+      description: get a dad joke
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response
+          schema:
+            $ref: '#/definitions/model.Message'
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/model.Message'
+      summary: Generate dadjoke
+      tags:
+      - DadJoke
   /openai/general:
     get:
       consumes:

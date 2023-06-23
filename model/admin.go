@@ -1,17 +1,29 @@
 package model
 
-import "os"
-
-var (
-	OpenaiApiKey = os.Getenv("OPENAI_API_KEY")
-	UnraidAPIKey = os.Getenv("UNRAID_API_KEY")
-	UnraidURI    = os.Getenv("UNRAID_URI")
-	ClientID     = os.Getenv("ClientID")
-	ClientSecret = os.Getenv("ClientSecret")
-	RedirectURL  = os.Getenv("RedirectURL")
-	AuthURL      = os.Getenv("AuthURL")
-	TokenURL     = os.Getenv("TokenURL")
-	Host         = os.Getenv("host")
-	Version      = os.Getenv("version")
-	Groupsenv    = os.Getenv("groups")
+import (
+	"github.com/sashabaranov/go-openai"
+	"gorm.io/gorm"
 )
+
+type Config struct {
+	OpenaiClient openai.Client
+	OpenaiApiKey string `env:"openai_api_key"`
+	UnraidAPIKey string `env:"unraid_api_key"`
+	UnraidURI    string `env:"unraid_uri"`
+	Host         string `env:"host"`
+	Version      string `env:"version"`
+	Groupsenv    string `env:"groupsenv"`
+}
+
+type DBConfig struct {
+	Host     string `env:"db_host"`
+	Port     string `env:"db_port"`
+	Password string `env:"db_pass"`
+	User     string `env:"db_user"`
+	DBName   string `env:"db_name"`
+	SSLMode  string `env:"db_sslmode"`
+}
+
+type Repository struct {
+	DB *gorm.DB
+}

@@ -9,12 +9,6 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"gitlab.com/DeveloperDurp/DurpAPI/model"
-)
-
-var (
-	unraidAPIKey = model.UnraidAPIKey
-	UnraidURI    = model.UnraidURI
 )
 
 // UnraidPowerUsage godoc
@@ -28,7 +22,6 @@ var (
 //	@failure		412 {object}	model.Message	"error"
 //	@Router			/unraid/powerusage [get]
 func (c *Controller) UnraidPowerUsage(ctx *gin.Context) {
-
 	jar, err := cookiejar.New(nil)
 	if err != nil {
 		fmt.Println(err)
@@ -41,10 +34,14 @@ func (c *Controller) UnraidPowerUsage(ctx *gin.Context) {
 
 	form := url.Values{
 		"username": {"root"},
-		"password": {unraidAPIKey},
+		"password": {c.Cfg.UnraidAPIKey},
 	}
 
-	req, err := http.NewRequest("POST", "https://"+UnraidURI+"/login", strings.NewReader(form.Encode()))
+	req, err := http.NewRequest(
+		"POST",
+		"https://"+c.Cfg.UnraidURI+"/login",
+		strings.NewReader(form.Encode()),
+	)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -62,7 +59,11 @@ func (c *Controller) UnraidPowerUsage(ctx *gin.Context) {
 		return
 	}
 
-	req, err = http.NewRequest("GET", "https://"+UnraidURI+"/plugins/corsairpsu/status.php", nil)
+	req, err = http.NewRequest(
+		"GET",
+		"https://"+c.Cfg.UnraidURI+"/plugins/corsairpsu/status.php",
+		nil,
+	)
 	if err != nil {
 		fmt.Println(err)
 		return
