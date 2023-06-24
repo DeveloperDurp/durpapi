@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -23,7 +24,7 @@ type Controller struct {
 func NewController() *Controller {
 	err := godotenv.Load(".env")
 	if err != nil {
-		log.Fatalf("unable to load file: %e", err)
+		fmt.Println("no env file found")
 	}
 
 	controller := &Controller{
@@ -43,7 +44,6 @@ func NewController() *Controller {
 	controller.Cfg.OpenaiClient = *openai.NewClient(controller.Cfg.OpenaiApiKey)
 
 	Db, err := storage.Connect(controller.Dbcfg)
-
 	if err != nil {
 		panic("Failed to connect to database")
 	}
