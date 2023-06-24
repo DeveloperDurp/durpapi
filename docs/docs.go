@@ -66,7 +66,7 @@ const docTemplate = `{
                 "tags": [
                     "DadJoke"
                 ],
-                "summary": "Generate dadjoke",
+                "summary": "Generate dadjokelocaloca",
                 "responses": {
                     "200": {
                         "description": "response",
@@ -74,7 +74,7 @@ const docTemplate = `{
                             "$ref": "#/definitions/model.Message"
                         }
                     },
-                    "400": {
+                    "500": {
                         "description": "error",
                         "schema": {
                             "$ref": "#/definitions/model.Message"
@@ -94,6 +94,15 @@ const docTemplate = `{
                     "DadJoke"
                 ],
                 "summary": "Generate dadjoke",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Dad Joke you wish to enter into database",
+                        "name": "joke",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "response",
@@ -101,7 +110,43 @@ const docTemplate = `{
                             "$ref": "#/definitions/model.Message"
                         }
                     },
-                    "400": {
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/model.Message"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "create a dad joke",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DadJoke"
+                ],
+                "summary": "Generate dadjoke",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Dad joke you wish to delete from the database",
+                        "name": "joke",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "response",
+                        "schema": {
+                            "$ref": "#/definitions/model.Message"
+                        }
+                    },
+                    "500": {
                         "description": "error",
                         "schema": {
                             "$ref": "#/definitions/model.Message"

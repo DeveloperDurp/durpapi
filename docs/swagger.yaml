@@ -79,6 +79,30 @@ paths:
       tags:
       - health
   /jokes/dadjoke:
+    delete:
+      consumes:
+      - application/json
+      description: create a dad joke
+      parameters:
+      - description: Dad joke you wish to delete from the database
+        in: query
+        name: joke
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response
+          schema:
+            $ref: '#/definitions/model.Message'
+        "500":
+          description: error
+          schema:
+            $ref: '#/definitions/model.Message'
+      summary: Generate dadjoke
+      tags:
+      - DadJoke
     get:
       consumes:
       - application/json
@@ -90,17 +114,23 @@ paths:
           description: response
           schema:
             $ref: '#/definitions/model.Message'
-        "400":
+        "500":
           description: error
           schema:
             $ref: '#/definitions/model.Message'
-      summary: Generate dadjoke
+      summary: Generate dadjokelocaloca
       tags:
       - DadJoke
     post:
       consumes:
       - application/json
       description: create a dad joke
+      parameters:
+      - description: Dad Joke you wish to enter into database
+        in: query
+        name: joke
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -108,7 +138,7 @@ paths:
           description: response
           schema:
             $ref: '#/definitions/model.Message'
-        "400":
+        "500":
           description: error
           schema:
             $ref: '#/definitions/model.Message'

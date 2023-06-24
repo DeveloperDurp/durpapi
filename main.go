@@ -43,6 +43,7 @@ func main() {
 
 			jokes.Use(c.AuthMiddleware([]string{"rw-jokes"}, c.Cfg.Groupsenv))
 			jokes.POST("dadjoke", c.PostDadJoke)
+			jokes.DELETE("dadjoke", c.DeleteDadJoke)
 		}
 		openai := v1.Group("/openai")
 		{
