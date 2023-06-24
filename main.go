@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -10,6 +12,8 @@ import (
 	"gitlab.com/DeveloperDurp/DurpAPI/controller"
 	"gitlab.com/DeveloperDurp/DurpAPI/docs"
 )
+
+var groupsenv = os.Getenv("groups")
 
 //	@title			DurpAPI
 //	@description	API for Durp's needs
@@ -41,19 +45,19 @@ func main() {
 		{
 			jokes.GET("dadjoke", c.GetDadJoke)
 
-			jokes.Use(c.AuthMiddleware([]string{"rw-jokes"}, c.Cfg.Groupsenv))
+			jokes.Use(authMiddleware([]string{"rw-jokes"}))
 			jokes.POST("dadjoke", c.PostDadJoke)
 			jokes.DELETE("dadjoke", c.DeleteDadJoke)
 		}
 		openai := v1.Group("/openai")
 		{
-			openai.Use(c.AuthMiddleware([]string{"openai"}, c.Cfg.Groupsenv))
+			openai.Use(authMiddleware([]string{"openai"}))
 			openai.GET("general", c.GeneralOpenAI)
 			openai.GET("travelagent", c.TravelAgentOpenAI)
 		}
 		unraid := v1.Group("/unraid")
 		{
-			openai.Use(c.AuthMiddleware([]string{"unraid"}, c.Cfg.Groupsenv))
+			openai.Use(authMiddleware([]string{"unraid"}))
 			unraid.GET("powerusage", c.UnraidPowerUsage)
 		}
 	}
@@ -62,5 +66,47 @@ func main() {
 	err := r.Run(":8080")
 	if err != nil {
 		fmt.Println("Failed to start server")
+	}
+}
+
+func authMiddleware(allowedGroups []string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var groups []string
+
+		if groupsenv != "" {
+			groups = strings.Split(groupsenv, ",")
+		} else {
+			// Get the user groups from the request headers
+			groupsHeader := c.GetHeader("X-authentik-groups")
+
+			// Split the groups header value into individual groups
+			groups = strings.Split(groupsHeader, "|")
+		}
+
+		// Check if the user belongs to any of the allowed groups
+		isAllowed := false
+		for _, allowedGroup := range allowedGroups {
+			for _, group := range groups {
+				if group == allowedGroup {
+					isAllowed = true
+					break
+				}
+			}
+			if isAllowed {
+				break
+			}
+		}
+
+		// If the user is not in any of the allowed groups, respond with unauthorized access
+		if !isAllowed {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"message": "Unauthorized access",
+				"groups":  groups,
+			})
+			return
+		}
+
+		// Call the next handler
+		c.Next()
 	}
 }

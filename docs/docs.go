@@ -66,7 +66,7 @@ const docTemplate = `{
                 "tags": [
                     "DadJoke"
                 ],
-                "summary": "Generate dadjokelocaloca",
+                "summary": "Get dadjoke",
                 "responses": {
                     "200": {
                         "description": "response",

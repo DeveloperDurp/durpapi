@@ -118,7 +118,7 @@ paths:
           description: error
           schema:
             $ref: '#/definitions/model.Message'
-      summary: Generate dadjokelocaloca
+      summary: Get dadjoke
       tags:
       - DadJoke
     post:
