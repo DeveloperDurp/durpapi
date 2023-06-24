@@ -18,7 +18,10 @@ func Connect(config model.DBConfig) (*model.Repository, error) {
 	if err != nil {
 		return nil, err
 	}
-	runMigrations(db)
+	err = runMigrations(db)
+	if err != nil {
+		return nil, err
+	}
 	return &model.Repository{
 		DB: db,
 	}, nil
