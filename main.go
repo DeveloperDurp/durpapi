@@ -40,6 +40,9 @@ func main() {
 		jokes := v1.Group("/jokes")
 		{
 			jokes.GET("dadjoke", c.GetDadJoke)
+
+			jokes.Use(c.AuthMiddleware([]string{"rw-jokes"}, c.Cfg.Groupsenv))
+			jokes.POST("dadjoke", c.PostDadJoke)
 		}
 		openai := v1.Group("/openai")
 		{

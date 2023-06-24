@@ -11,11 +11,13 @@ import (
 	"github.com/sashabaranov/go-openai"
 
 	"gitlab.com/DeveloperDurp/DurpAPI/model"
+	"gitlab.com/DeveloperDurp/DurpAPI/storage"
 )
 
 type Controller struct {
 	Cfg   model.Config
-	dbcfg model.DBConfig
+	Dbcfg model.DBConfig
+	Db    model.Repository
 }
 
 func NewController() *Controller {
@@ -23,19 +25,30 @@ func NewController() *Controller {
 	if err != nil {
 		log.Fatalf("unable to load file: %e", err)
 	}
-	controller := &Controller{}
-	controller.Cfg = model.Config{}
-	controller.dbcfg = model.DBConfig{}
+
+	controller := &Controller{
+		Cfg:   model.Config{},
+		Dbcfg: model.DBConfig{},
+	}
 
 	err = env.Parse(&controller.Cfg)
 	if err != nil {
 		log.Fatalf("unable to parse environment variables: %e", err)
 	}
-	err = env.Parse(&controller.dbcfg)
+	err = env.Parse(&controller.Dbcfg)
 	if err != nil {
 		log.Fatalf("unable to parse database variables: %e", err)
 	}
+
 	controller.Cfg.OpenaiClient = *openai.NewClient(controller.Cfg.OpenaiApiKey)
+
+	Db, err := storage.Connect(controller.Dbcfg)
+
+	if err != nil {
+		panic("Failed to connect to database")
+	}
+	controller.Db = *Db
+
 	return controller
 }
 
