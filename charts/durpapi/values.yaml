@@ -16,3 +16,4 @@ service:
   type: ClusterIP
   port: 80
   targetport: 8080
+

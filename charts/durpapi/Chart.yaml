@@ -5,3 +5,7 @@ type: application
 
 version: 0.1.0
 appVersion: "0.1.0"
+dependencies:
+  - name: postgresql
+    version: 12.5.*
+    repository: https://charts.bitnami.com/bitnami
