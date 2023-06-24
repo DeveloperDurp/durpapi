@@ -11,7 +11,7 @@ import (
 
 // GetDadJoke godoc
 //
-//	@Summary		Generate dadjokelocaloca
+//	@Summary		Get dadjoke
 //	@Description get a dad joke
 //	@Tags			DadJoke
 //	@Accept			json
