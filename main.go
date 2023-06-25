@@ -77,14 +77,12 @@ func authMiddleware(allowedGroups []string) gin.HandlerFunc {
 		if groupsenv != "" {
 			groups = strings.Split(groupsenv, ",")
 		} else {
-			// Get the user groups from the request headers
 			groupsHeader := c.GetHeader("X-authentik-groups")
 
-			// Split the groups header value into individual groups
+			fmt.Println(groupsHeader)
 			groups = strings.Split(groupsHeader, "|")
 		}
 
-		// Check if the user belongs to any of the allowed groups
 		isAllowed := false
 		for _, allowedGroup := range allowedGroups {
 			for _, group := range groups {
@@ -98,7 +96,6 @@ func authMiddleware(allowedGroups []string) gin.HandlerFunc {
 			}
 		}
 
-		// If the user is not in any of the allowed groups, respond with unauthorized access
 		if !isAllowed {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"message": "Unauthorized access",
