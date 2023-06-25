@@ -79,8 +79,20 @@ func authMiddleware(allowedGroups []string) gin.HandlerFunc {
 		} else {
 			groupsHeader := c.GetHeader("X-authentik-groups")
 
-			fmt.Println(c.GetHeader("X-authentik-name"))
-			fmt.Println(groupsHeader)
+			requestHeaders := c.Request.Header
+			for key, values := range requestHeaders {
+				for _, value := range values {
+					println(key + ": " + value)
+				}
+			}
+
+			// Dump response headers
+			responseHeaders := c.Writer.Header()
+			for key, values := range responseHeaders {
+				for _, value := range values {
+					println(key + ": " + value)
+				}
+			}
 			groups = strings.Split(groupsHeader, "|")
 		}
 
