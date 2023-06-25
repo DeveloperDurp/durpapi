@@ -79,6 +79,7 @@ func authMiddleware(allowedGroups []string) gin.HandlerFunc {
 		} else {
 			groupsHeader := c.GetHeader("X-authentik-groups")
 
+			fmt.Println(c.GetHeader("X-authentik-name"))
 			fmt.Println(groupsHeader)
 			groups = strings.Split(groupsHeader, "|")
 		}
