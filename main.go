@@ -58,7 +58,7 @@ func main() {
 		}
 		unraid := v1.Group("/unraid")
 		{
-			openai.Use(authMiddleware([]string{"unraid"}))
+			unraid.Use(authMiddleware([]string{"unraid"}))
 			unraid.GET("powerusage", c.UnraidPowerUsage)
 		}
 	}
