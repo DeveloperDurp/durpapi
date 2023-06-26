@@ -77,7 +77,7 @@ func authMiddleware(allowedGroups []string) gin.HandlerFunc {
 		if groupsenv != "" {
 			groups = strings.Split(groupsenv, ",")
 		} else {
-			groupsHeader := c.GetHeader("X-authentik-groups")
+			groupsHeader := c.GetHeader("X-Authentik-Groups")
 
 			requestHeaders := c.Request.Header
 			for key, values := range requestHeaders {
