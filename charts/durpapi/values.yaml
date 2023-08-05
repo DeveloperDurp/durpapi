@@ -8,6 +8,7 @@ deployment:
     maxReplicas: 10
 
 ingress:
+  enabled: false
   clusterissuer: letsencrypt-production
   host: durpapi.durp.info
   tls: durpapi-tls

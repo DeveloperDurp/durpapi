@@ -1,4 +1,4 @@
-basePath: /api/v1
+basePath: /api
 definitions:
   model.Message:
     properties:
@@ -214,4 +214,9 @@ paths:
       summary: Unraid PSU Stats
       tags:
       - unraid
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

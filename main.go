@@ -32,7 +32,10 @@ var groupsenv = os.Getenv("groups")
 //	@license.name	Apache 2.0
 //	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html
 
-//	@BasePath	/api/v1
+//	@BasePath					/api
+//	@securityDefinitions.apikey	ApiKeyAuth
+//	@in							header
+//	@name						Authorization
 
 func main() {
 	r := gin.Default()
@@ -41,7 +44,7 @@ func main() {
 	docs.SwaggerInfo.Host = c.Cfg.Host
 	docs.SwaggerInfo.Version = c.Cfg.Version
 
-	v1 := r.Group("/api/v1")
+	v1 := r.Group("/api")
 	{
 		health := v1.Group("/health")
 		{
