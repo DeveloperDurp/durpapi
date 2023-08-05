@@ -1,4 +1,4 @@
-{{ -if .Values.ingress.enabled }}
+{{ if .Values.ingress.enabled }}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -17,9 +17,11 @@ spec:
       port: {{ .Values.service.port }}      
   tls:
     secretName: {{ .Values.ingress.tls }}
+{{ end }}
 
 ---
 
+{{ if .Values.ingress.enabled }}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
