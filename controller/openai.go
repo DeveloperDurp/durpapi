@@ -20,10 +20,10 @@ type ChatRequest struct {
 //	@Tags			openai
 //	@Accept			json
 //	@Produce		application/json
-//	@Param			message	query		string		true	"Ask ChatGPT a general question"
-//	@Success		200	{object}	model.Message	"response"
+//	@Param			message	query		string			true	"Ask ChatGPT a general question"
+//	@Success		200		{object}	model.Message	"response"
 //
-// @failure		400 {object}	model.Message	"error"
+//	@failure		400		{object}	model.Message	"error"
 //
 //	@Router			/openai/general [get]
 func (c *Controller) GeneralOpenAI(ctx *gin.Context) {
@@ -51,9 +51,9 @@ func (c *Controller) GeneralOpenAI(ctx *gin.Context) {
 //	@Tags			openai
 //	@Accept			json
 //	@Produce		application/json
-//	@Param			message	query		string		true	"Ask ChatGPT for suggestions as a travel agent"
-//	@Success		200	{object}	model.Message	"response"
-//	@failure		400 {object}	model.Message	"error"
+//	@Param			message	query		string			true	"Ask ChatGPT for suggestions as a travel agent"
+//	@Success		200		{object}	model.Message	"response"
+//	@failure		400		{object}	model.Message	"error"
 //	@Router			/openai/travelagent [get]
 func (c *Controller) TravelAgentOpenAI(ctx *gin.Context) {
 	var req ChatRequest

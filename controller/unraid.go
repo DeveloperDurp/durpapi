@@ -19,7 +19,7 @@ import (
 //	@Accept			json
 //	@Produce		json
 //	@Success		200	{object}	model.PowerSupply	"response"
-//	@failure		412 {object}	model.Message	"error"
+//	@failure		412	{object}	model.Message		"error"
 //	@Router			/unraid/powerusage [get]
 func (c *Controller) UnraidPowerUsage(ctx *gin.Context) {
 	jar, err := cookiejar.New(nil)

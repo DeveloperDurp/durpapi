@@ -14,7 +14,7 @@ import (
 //	@Accept			json
 //	@Produce		application/json
 //	@Success		200	{object}	model.Message	"response"
-//	@failure		400 {object}	model.Message	"error"
+//	@failure		400	{object}	model.Message	"error"
 //	@Router			/health/getHealth [get]
 func (c *Controller) GetHealth(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})

@@ -13,6 +13,7 @@ type Config struct {
 	Host         string `env:"host"`
 	Version      string `env:"version"`
 	Groupsenv    string `env:"groupsenv"`
+	JwksURL      string `env:"jwksurl"`
 }
 
 type DBConfig struct {

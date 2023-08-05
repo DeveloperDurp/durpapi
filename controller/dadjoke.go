@@ -12,12 +12,12 @@ import (
 // GetDadJoke godoc
 //
 //	@Summary		Get dadjoke
-//	@Description get a dad joke
+//	@Description	get a dad joke
 //	@Tags			DadJoke
 //	@Accept			json
 //	@Produce		application/json
 //	@Success		200	{object}	model.Message	"response"
-//	@failure		500 {object}	model.Message	"error"
+//	@failure		500	{object}	model.Message	"error"
 //	@Router			/jokes/dadjoke [get]
 func (c *Controller) GetDadJoke(ctx *gin.Context) {
 	joke, err := service.GetRandomDadJoke(c.Db.DB)
@@ -32,13 +32,13 @@ func (c *Controller) GetDadJoke(ctx *gin.Context) {
 // PostDadJoke godoc
 //
 //	@Summary		Generate dadjoke
-//	@Description create a dad joke
+//	@Description	create a dad joke
 //	@Tags			DadJoke
 //	@Accept			json
 //	@Produce		application/json
-//	@Param			joke	query		string		true	"Dad Joke you wish to enter into database"
-//	@Success		200	{object}	model.Message	"response"
-//	@failure		500 {object}	model.Message	"error"
+//	@Param			joke	query		string			true	"Dad Joke you wish to enter into database"
+//	@Success		200		{object}	model.Message	"response"
+//	@failure		500		{object}	model.Message	"error"
 //	@Router			/jokes/dadjoke [post]
 func (c *Controller) PostDadJoke(ctx *gin.Context) {
 	var req model.DadJoke
@@ -58,13 +58,13 @@ func (c *Controller) PostDadJoke(ctx *gin.Context) {
 // DeleteDadJoke godoc
 //
 //	@Summary		Generate dadjoke
-//	@Description create a dad joke
+//	@Description	create a dad joke
 //	@Tags			DadJoke
 //	@Accept			json
 //	@Produce		application/json
-//	@Param			joke	query		string		true	"Dad joke you wish to delete from the database"
-//	@Success		200	{object}	model.Message	"response"
-//	@failure		500 {object}	model.Message	"error"
+//	@Param			joke	query		string			true	"Dad joke you wish to delete from the database"
+//	@Success		200		{object}	model.Message	"response"
+//	@failure		500		{object}	model.Message	"error"
 //	@Router			/jokes/dadjoke [delete]
 func (c *Controller) DeleteDadJoke(ctx *gin.Context) {
 	var req model.DadJoke
