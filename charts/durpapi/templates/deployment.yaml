@@ -21,15 +21,15 @@ spec:
         imagePullPolicy: {{ .Values.deployment.imagePullPolicy }}   
         readinessProbe:
           httpGet:
-            path: /api/v1/health/getHealth
+            path: /api/health/getHealth
             port: 8080
         livenessProbe:
           httpGet:
-            path: /api/v1/health/getHealth
+            path: /api/health/getHealth
             port: 8080
         startupProbe:
           httpGet:
-            path: /api/v1/health/getHealth
+            path: /api/health/getHealth
             port: 8080
         ports:
         - name: http
