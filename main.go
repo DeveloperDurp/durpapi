@@ -19,7 +19,7 @@ import (
 	"gitlab.com/DeveloperDurp/DurpAPI/docs"
 )
 
-var groupsenv = os.Getenv("groups")
+// var groupsenv = os.Getenv("groups")
 
 //	@title			DurpAPI
 //	@description	API for Durp's needs
