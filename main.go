@@ -54,19 +54,19 @@ func main() {
 		{
 			jokes.GET("dadjoke", c.GetDadJoke)
 
-			jokes.Use(authMiddleware([]string{"rw-jokes"}))
+			//jokes.Use(authMiddleware([]string{"rw-jokes"}))
 			jokes.POST("dadjoke", c.PostDadJoke)
 			jokes.DELETE("dadjoke", c.DeleteDadJoke)
 		}
 		openai := v1.Group("/openai")
 		{
-			openai.Use(authMiddleware([]string{"openai"}))
+			//openai.Use(authMiddleware([]string{"openai"}))
 			openai.GET("general", c.GeneralOpenAI)
 			openai.GET("travelagent", c.TravelAgentOpenAI)
 		}
 		unraid := v1.Group("/unraid")
 		{
-			unraid.Use(authMiddleware([]string{"unraid"}))
+			//unraid.Use(authMiddleware([]string{"unraid"}))
 			unraid.GET("powerusage", c.UnraidPowerUsage)
 		}
 	}
