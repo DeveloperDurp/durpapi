@@ -1,17 +1,9 @@
 package main
 
 import (
-	"context"
 	"fmt"
-	"log"
-	"net/http"
-	"os"
-	"strings"
-	"time"
 
-	"github.com/MicahParks/keyfunc"
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v4"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
@@ -61,7 +53,6 @@ func main() {
 		}
 		unraid := v1.Group("/unraid")
 		{
-			unraid.Use(authMiddleware([]string{"unraid"}))
 			unraid.GET("powerusage", c.UnraidPowerUsage)
 		}
 	}
