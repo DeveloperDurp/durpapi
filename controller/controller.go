@@ -6,7 +6,6 @@ import (
 
 	"github.com/caarlos0/env/v6"
 	"github.com/joho/godotenv"
-	"github.com/sashabaranov/go-openai"
 
 	"gitlab.com/DeveloperDurp/DurpAPI/model"
 	"gitlab.com/DeveloperDurp/DurpAPI/storage"
@@ -37,8 +36,6 @@ func NewController() *Controller {
 	if err != nil {
 		log.Fatalf("unable to parse database variables: %e", err)
 	}
-
-	controller.Cfg.OpenaiClient = *openai.NewClient(controller.Cfg.OpenaiApiKey)
 
 	Db, err := storage.Connect(controller.Dbcfg)
 	if err != nil {

@@ -1,19 +1,15 @@
 package model
 
 import (
-	"github.com/sashabaranov/go-openai"
 	"gorm.io/gorm"
 )
 
 type Config struct {
-	OpenaiClient openai.Client
-	OpenaiApiKey string `env:"openai_api_key"`
-	UnraidAPIKey string `env:"unraid_api_key"`
-	UnraidURI    string `env:"unraid_uri"`
-	Host         string `env:"host"`
-	Version      string `env:"version"`
-	Groupsenv    string `env:"groupsenv"`
-	JwksURL      string `env:"jwksurl"`
+	Host      string `env:"host"`
+	Version   string `env:"version"`
+	Groupsenv string `env:"groupsenv"`
+	JwksURL   string `env:"jwksurl"`
+	LlamaURL  string `env:"llamaurl"`
 }
 
 type DBConfig struct {
