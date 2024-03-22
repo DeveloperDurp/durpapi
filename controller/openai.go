@@ -39,7 +39,7 @@ func (c *Controller) GeneralOpenAI(ctx *gin.Context) {
 		req.Message = ctx.Query("message")
 	}
 
-	result, err := c.createChatCompletion(req.Message, "openchat")
+	result, err := c.createChatCompletion(req.Message, "mistral:instruct")
 	if err != nil {
 		err := ctx.AbortWithError(http.StatusInternalServerError, err)
 		if err != nil {
