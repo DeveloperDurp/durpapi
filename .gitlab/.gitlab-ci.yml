@@ -77,4 +77,4 @@ publish:
     - when: never
     
 deploy_prod:
-  extends: .octo_release
+  extends: .gitlab-deploy
