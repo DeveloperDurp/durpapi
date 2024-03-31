@@ -6,7 +6,7 @@ stages:
   - deploy
 
 include:
-  - project: 'developerdurp/yml'
+  - project: 'devel  - template: Security/Secret-Detection.gitlab-ci.ymloperdurp/yml'
     ref: 'main'
     file: 
       - 'jobs/octopus.yml'
