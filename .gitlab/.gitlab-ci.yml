@@ -1,5 +1,85 @@
+stages:
+  - compliance
+  - build
+  - package
+  - publish 
+  - deploy
+
 include:
   - project: 'developerdurp/yml'
-    ref: main
-    file: 'pipeline.yml'
-  - local: .variables.yml
+    ref: 'main'
+    file: 
+      - 'jobs/octopus.yml'
+      - 'jobs/version.yml'
+      - 'jobs/sonarqube.yml'
+      - 'jobs/golang.yml'
+      - 'jobs/docker.yml'
+
+secret_detection:
+  stage: compliance
+  rules:
+    - if: $CI_MERGE_REQUEST_IID
+  allow_failure: false
+
+sonarqube:
+  extends: .sonarcloud-check
+  stage: compliance
+  allow_failure: true
+  rules:
+    - if: $CI_COMMIT_REF_NAME == 'main' || $CI_MERGE_REQUEST_IID
+      exists:
+        - "sonar-project.properties"  
+
+golang-lint:
+  extends: .golang-lint
+  stage: compliance
+  rules:
+    - if: $CI_MERGE_REQUEST_IID
+     exists:
+      - "go.mod"  
+
+version:
+  extends: .version
+  stage: .pre
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH =~ '/^release/'
+
+gobuild:
+  variables:
+    GOPROXY: https://nexus.durp.info/repository/go/
+  extends: .golang-build-api
+  stage: build
+
+docker:
+  extends: .docker-build-container
+  stage: publish
+  needs:
+    - job: gobuild
+      artifacts: true
+    - job: version
+      artifacts: true        
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH =~ '/^release/'
+
+publish:
+  extends: .octo_release
+  stage: publish
+  needs: 
+    - job: version
+      artifacts: true
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH =~ '/^release/'
+      exists:
+        - $OCTO_PROJECT_NAME
+    - when: never
+    
+deploy_prod:
+  stage: deploy
+  script:
+    - echo "Deploy to production server"
+  environment:
+    name: production
+    url: https://api.durp.info/goapi
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH =~ '/^release/'
+      when: manual
