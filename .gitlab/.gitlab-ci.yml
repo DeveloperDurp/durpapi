@@ -34,9 +34,9 @@ golang-lint:
   extends: .golang-lint
   stage: compliance
   rules:
-  - if: $CI_MERGE_REQUEST_IID
-     exists:
-      - "go.mod"  
+    - if: $CI_MERGE_REQUEST_IID
+      exists:
+        - "go.mod"  
 
 version:
   extends: .version
