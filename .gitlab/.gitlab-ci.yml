@@ -10,6 +10,7 @@ include:
   - project: 'developerdurp/yml'
     ref: 'main'
     file: 
+      - 'jobs/gitlab.yml'
       - 'jobs/octopus.yml'
       - 'jobs/version.yml'
       - 'jobs/sonarqube.yml'
@@ -76,12 +77,4 @@ publish:
     - when: never
     
 deploy_prod:
-  stage: deploy
-  script:
-    - echo "Deploy to production server"
-  environment:
-    name: production
-    url: https://api.durp.info/goapi
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH =~ '/^release/'
-      when: manual
+  extends: .octo_release
