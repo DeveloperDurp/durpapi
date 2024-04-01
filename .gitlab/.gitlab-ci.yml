@@ -71,22 +71,8 @@ publish:
     - job: version
       artifacts: true
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH =~ '/^release/'
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH =~ '/^release/' && $OCTO_PROJECT_NAME
       exists:
-        - $OCTO_PROJECT_NAME
+        - ".octopus/*"  
     - when: never
     
-publish:
-  extends: .octo_release
-  stage: publish
-  needs: 
-    - job: version
-      artifacts: true
-  rules:
-    - if: $CI_COMMIT_BRANCH =~ '/^release/'
-      exists:
-        - $OCTO_PROJECT_NAME
-    - if: $CI_COMMIT_BRANCH =~ 'main'
-      exists:
-        - $OCTO_PROJECT_NAME
-    - when: never
