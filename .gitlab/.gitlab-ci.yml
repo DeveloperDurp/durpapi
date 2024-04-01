@@ -50,7 +50,7 @@ gobuild:
   image: registry.internal.durp.info/golang:1.22
   variables:
     GOPROXY: https://nexus.durp.info/repository/go/
-  extends: .golang-build-api
+  extends: .golang-build
   stage: build
 
 docker:
@@ -76,5 +76,17 @@ publish:
         - $OCTO_PROJECT_NAME
     - when: never
     
-deploy_prod:
-  extends: .gitlab-deploy
+publish:
+  extends: .octo_release
+  stage: publish
+  needs: 
+    - job: version
+      artifacts: true
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ '/^release/'
+      exists:
+        - $OCTO_PROJECT_NAME
+    - if: $CI_COMMIT_BRANCH =~ 'main'
+      exists:
+        - $OCTO_PROJECT_NAME
+    - when: never
