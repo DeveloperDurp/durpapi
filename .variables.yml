@@ -1,5 +1,4 @@
 variables:
-  PIPELINE: 'goapi'
   GO_VERSION: '1.22'
   GOLANGCI_LINT_VERISON: "v1.54"
   OCTO_PROJECT_NAME: "DurpAPI"
