@@ -17,6 +17,5 @@ COPY ./output/* .
 RUN chown -R durp /app
 
 USER durp
-ENV GIN_MODE=release
 EXPOSE 8080
 CMD ["./main"]
