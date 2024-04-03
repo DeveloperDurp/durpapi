@@ -52,6 +52,11 @@
         },
         "/jokes/dadjoke": {
             "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
                 "description": "get a dad joke",
                 "consumes": [
                     "application/json"
@@ -79,6 +84,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
                 "description": "create a dad joke",
                 "consumes": [
                     "application/json"
@@ -115,6 +125,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
                 "description": "create a dad joke",
                 "consumes": [
                     "application/json"
@@ -153,6 +168,11 @@
         },
         "/openai/general": {
             "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
                 "description": "Ask ChatGPT a general question",
                 "consumes": [
                     "application/json"
@@ -191,6 +211,11 @@
         },
         "/openai/travelagent": {
             "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
                 "description": "Ask ChatGPT for suggestions as if it was a travel agent",
                 "consumes": [
                     "application/json"

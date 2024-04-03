@@ -61,6 +61,8 @@ paths:
           description: error
           schema:
             $ref: '#/definitions/model.Message'
+      security:
+      - Authorization: []
       summary: Generate dadjoke
       tags:
       - DadJoke
@@ -79,6 +81,8 @@ paths:
           description: error
           schema:
             $ref: '#/definitions/model.Message'
+      security:
+      - Authorization: []
       summary: Get dadjoke
       tags:
       - DadJoke
@@ -103,6 +107,8 @@ paths:
           description: error
           schema:
             $ref: '#/definitions/model.Message'
+      security:
+      - Authorization: []
       summary: Generate dadjoke
       tags:
       - DadJoke
@@ -128,6 +134,8 @@ paths:
           description: error
           schema:
             $ref: '#/definitions/model.Message'
+      security:
+      - Authorization: []
       summary: Gerneral ChatGPT
       tags:
       - openai
@@ -153,6 +161,8 @@ paths:
           description: error
           schema:
             $ref: '#/definitions/model.Message'
+      security:
+      - Authorization: []
       summary: Travel Agent ChatGPT
       tags:
       - openai

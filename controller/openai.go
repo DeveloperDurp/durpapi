@@ -31,6 +31,8 @@ type Response struct {
 //
 //	@failure		400		{object}	model.Message	"error"
 //
+// @Security Authorization
+//
 //	@Router			/openai/general [get]
 func (c *Controller) GeneralOpenAI(w http.ResponseWriter, r *http.Request) {
 	contentType := r.Header.Get("Content-Type")
@@ -73,6 +75,9 @@ func (c *Controller) GeneralOpenAI(w http.ResponseWriter, r *http.Request) {
 //	@Param			message	query		string			true	"Ask ChatGPT for suggestions as a travel agent"
 //	@Success		200		{object}	model.Message	"response"
 //	@failure		400		{object}	model.Message	"error"
+//
+// @Security Authorization
+//
 //	@Router			/openai/travelagent [get]
 func (c *Controller) TravelAgentOpenAI(w http.ResponseWriter, r *http.Request) {
 	contentType := r.Header.Get("Content-Type")

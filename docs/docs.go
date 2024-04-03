@@ -60,6 +60,11 @@ const docTemplate = `{
         },
         "/jokes/dadjoke": {
             "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
                 "description": "get a dad joke",
                 "consumes": [
                     "application/json"
@@ -87,6 +92,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
                 "description": "create a dad joke",
                 "consumes": [
                     "application/json"
@@ -123,6 +133,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
                 "description": "create a dad joke",
                 "consumes": [
                     "application/json"
@@ -161,6 +176,11 @@ const docTemplate = `{
         },
         "/openai/general": {
             "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
                 "description": "Ask ChatGPT a general question",
                 "consumes": [
                     "application/json"
@@ -199,6 +219,11 @@ const docTemplate = `{
         },
         "/openai/travelagent": {
             "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
                 "description": "Ask ChatGPT for suggestions as if it was a travel agent",
                 "consumes": [
                     "application/json"

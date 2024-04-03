@@ -17,6 +17,9 @@ import (
 //	@Produce		application/json
 //	@Success		200	{object}	model.Message	"response"
 //	@failure		500	{object}	model.Message	"error"
+//
+// @Security Authorization
+//
 //	@Router			/jokes/dadjoke [get]
 func (c *Controller) GetDadJoke(w http.ResponseWriter, r *http.Request) {
 	joke, err := service.GetRandomDadJoke(c.Db.DB)
@@ -44,6 +47,9 @@ func (c *Controller) GetDadJoke(w http.ResponseWriter, r *http.Request) {
 //	@Param			joke	query		string			true	"Dad Joke you wish to enter into database"
 //	@Success		200		{object}	model.Message	"response"
 //	@failure		500		{object}	model.Message	"error"
+//
+// @Security Authorization
+//
 //	@Router			/jokes/dadjoke [post]
 func (c *Controller) PostDadJoke(w http.ResponseWriter, r *http.Request) {
 	contentType := r.Header.Get("Content-Type")
@@ -86,6 +92,9 @@ func (c *Controller) PostDadJoke(w http.ResponseWriter, r *http.Request) {
 //	@Param			joke	query		string			true	"Dad joke you wish to delete from the database"
 //	@Success		200		{object}	model.Message	"response"
 //	@failure		500		{object}	model.Message	"error"
+//
+// @Security Authorization
+//
 //	@Router			/jokes/dadjoke [delete]
 func (c *Controller) DeleteDadJoke(w http.ResponseWriter, r *http.Request) {
 	contentType := r.Header.Get("Content-Type")

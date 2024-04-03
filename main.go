@@ -35,10 +35,13 @@ func main() {
 
 	router := http.NewServeMux()
 	router.HandleFunc("/swagger/*", httpSwagger.Handler())
+
 	router.HandleFunc("GET /api/health/gethealth", c.GetHealth)
+
 	router.HandleFunc("GET /api/jokes/dadjoke", c.GetDadJoke)
 	router.HandleFunc("POST /api/jokes/dadjoke", c.PostDadJoke)
 	router.HandleFunc("DELETE /api/jokes/dadjoke", c.DeleteDadJoke)
+
 	router.HandleFunc("GET /api/openai/general", c.GeneralOpenAI)
 	router.HandleFunc("GET /api/openai/travelagent", c.TravelAgentOpenAI)
 	// adminRouter := http.NewServeMux()
