@@ -1,4 +1,4 @@
-FROM registry.internal.durp.info/golang:1.20-alpine
+FROM registry.internal.durp.info/golang:1.22-alpine
 
 RUN chmod -R o=,g=rwX /go
 RUN mkdir /app
