@@ -16,8 +16,13 @@
     },
     "basePath": "/api",
     "paths": {
-        "/health/getHealth": {
+        "/health/gethealth": {
             "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
                 "description": "Get the health of the API",
                 "consumes": [
                     "application/json"
@@ -36,7 +41,7 @@
                             "$ref": "#/definitions/model.Message"
                         }
                     },
-                    "400": {
+                    "500": {
                         "description": "error",
                         "schema": {
                             "$ref": "#/definitions/model.Message"
@@ -221,35 +226,6 @@
                     }
                 }
             }
-        },
-        "/unraid/powerusage": {
-            "get": {
-                "description": "Gets the PSU Data from unraid",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "unraid"
-                ],
-                "summary": "Unraid PSU Stats",
-                "responses": {
-                    "200": {
-                        "description": "response",
-                        "schema": {
-                            "$ref": "#/definitions/model.PowerSupply"
-                        }
-                    },
-                    "412": {
-                        "description": "error",
-                        "schema": {
-                            "$ref": "#/definitions/model.Message"
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
@@ -261,72 +237,10 @@
                     "example": "message"
                 }
             }
-        },
-        "model.PowerSupply": {
-            "type": "object",
-            "properties": {
-                "12v_load": {
-                    "type": "integer"
-                },
-                "12v_watts": {
-                    "type": "integer"
-                },
-                "3v_load": {
-                    "type": "integer"
-                },
-                "3v_watts": {
-                    "type": "integer"
-                },
-                "5v_load": {
-                    "type": "integer"
-                },
-                "5v_watts": {
-                    "type": "integer"
-                },
-                "capacity": {
-                    "type": "string"
-                },
-                "efficiency": {
-                    "type": "integer"
-                },
-                "fan_rpm": {
-                    "type": "integer"
-                },
-                "load": {
-                    "type": "integer"
-                },
-                "poweredon": {
-                    "type": "string"
-                },
-                "poweredon_raw": {
-                    "type": "string"
-                },
-                "product": {
-                    "type": "string"
-                },
-                "temp1": {
-                    "type": "integer"
-                },
-                "temp2": {
-                    "type": "integer"
-                },
-                "uptime": {
-                    "type": "string"
-                },
-                "uptime_raw": {
-                    "type": "string"
-                },
-                "vendor": {
-                    "type": "string"
-                },
-                "watts": {
-                    "type": "integer"
-                }
-            }
         }
     },
     "securityDefinitions": {
-        "ApiKeyAuth": {
+        "Authorization": {
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"

@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
-	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/http-swagger"
 
 	"gitlab.com/DeveloperDurp/DurpAPI/controller"
 	"gitlab.com/DeveloperDurp/DurpAPI/docs"
+	"gitlab.com/DeveloperDurp/DurpAPI/middleware"
 )
 
 //	@title			DurpAPI
@@ -23,39 +23,37 @@ import (
 //	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html
 
 //	@BasePath					/api
-//	@securityDefinitions.apikey	ApiKeyAuth
+//	@securityDefinitions.apikey	Authorization
 //	@in							header
 //	@name						Authorization
 
 func main() {
-	r := gin.Default()
 	c := controller.NewController()
 
 	docs.SwaggerInfo.Host = c.Cfg.Host
 	docs.SwaggerInfo.Version = c.Cfg.Version
 
-	v1 := r.Group("/api")
-	{
-		health := v1.Group("/health")
-		{
-			health.GET("getHealth", c.GetHealth)
-		}
-		jokes := v1.Group("/jokes")
-		{
-			jokes.GET("dadjoke", c.GetDadJoke)
-			jokes.POST("dadjoke", c.PostDadJoke)
-			jokes.DELETE("dadjoke", c.DeleteDadJoke)
-		}
-		openai := v1.Group("/openai")
-		{
-			openai.GET("general", c.GeneralOpenAI)
-			openai.GET("travelagent", c.TravelAgentOpenAI)
-		}
-	}
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router := http.NewServeMux()
+	router.HandleFunc("/swagger/*", httpSwagger.Handler())
+	router.HandleFunc("GET /api/health/gethealth", c.GetHealth)
+	router.HandleFunc("GET /api/jokes/dadjoke", c.GetDadJoke)
+	router.HandleFunc("POST /api/jokes/dadjoke", c.PostDadJoke)
+	router.HandleFunc("DELETE /api/jokes/dadjoke", c.DeleteDadJoke)
+	router.HandleFunc("GET /api/openai/general", c.GeneralOpenAI)
+	router.HandleFunc("GET /api/openai/travelagent", c.TravelAgentOpenAI)
+	// adminRouter := http.NewServeMux()
 
-	err := r.Run(":8080")
-	if err != nil {
-		fmt.Println("Failed to start server")
+	// router.Handle("/", middleware.EnsureAdmin(adminRouter))
+
+	stack := middleware.CreateStack(
+		middleware.Logging,
+	)
+
+	server := http.Server{
+		Addr:    ":8080",
+		Handler: stack(router),
 	}
+
+	fmt.Println("Server listening on port :8080")
+	server.ListenAndServe()
 }

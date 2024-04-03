@@ -1,9 +1,8 @@
 package controller
 
 import (
+	"encoding/json"
 	"net/http"
-
-	"github.com/gin-gonic/gin"
 
 	"gitlab.com/DeveloperDurp/DurpAPI/model"
 	"gitlab.com/DeveloperDurp/DurpAPI/service"
@@ -19,14 +18,20 @@ import (
 //	@Success		200	{object}	model.Message	"response"
 //	@failure		500	{object}	model.Message	"error"
 //	@Router			/jokes/dadjoke [get]
-func (c *Controller) GetDadJoke(ctx *gin.Context) {
+func (c *Controller) GetDadJoke(w http.ResponseWriter, r *http.Request) {
 	joke, err := service.GetRandomDadJoke(c.Db.DB)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err})
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": joke})
+	message := model.Message{
+		Message: joke,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(message)
 }
 
 // PostDadJoke godoc
@@ -40,19 +45,35 @@ func (c *Controller) GetDadJoke(ctx *gin.Context) {
 //	@Success		200		{object}	model.Message	"response"
 //	@failure		500		{object}	model.Message	"error"
 //	@Router			/jokes/dadjoke [post]
-func (c *Controller) PostDadJoke(ctx *gin.Context) {
+func (c *Controller) PostDadJoke(w http.ResponseWriter, r *http.Request) {
+	contentType := r.Header.Get("Content-Type")
 	var req model.DadJoke
 
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		req.JOKE = ctx.Query("joke")
+	if contentType == "application/json" {
+		err := json.NewDecoder(r.Body).Decode(&req)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
+			return
+		}
+	} else {
+		queryParams := r.URL.Query()
+		req.JOKE = queryParams.Get("joke")
 	}
 
 	err := service.PostDadJoke(c.Db.DB, req)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})
+
+	message := model.Message{
+		Message: "OK",
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(message)
 }
 
 // DeleteDadJoke godoc
@@ -66,17 +87,33 @@ func (c *Controller) PostDadJoke(ctx *gin.Context) {
 //	@Success		200		{object}	model.Message	"response"
 //	@failure		500		{object}	model.Message	"error"
 //	@Router			/jokes/dadjoke [delete]
-func (c *Controller) DeleteDadJoke(ctx *gin.Context) {
+func (c *Controller) DeleteDadJoke(w http.ResponseWriter, r *http.Request) {
+	contentType := r.Header.Get("Content-Type")
 	var req model.DadJoke
 
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		req.JOKE = ctx.Query("joke")
+	if contentType == "application/json" {
+		err := json.NewDecoder(r.Body).Decode(&req)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
+			return
+		}
+	} else {
+		queryParams := r.URL.Query()
+		req.JOKE = queryParams.Get("joke")
 	}
 
 	err := service.DeleteDadJoke(c.Db.DB, req)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})
+
+	message := model.Message{
+		Message: "OK",
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(message)
 }

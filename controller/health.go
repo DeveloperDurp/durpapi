@@ -1,9 +1,10 @@
 package controller
 
 import (
+	"encoding/json"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
+	"gitlab.com/DeveloperDurp/DurpAPI/model"
 )
 
 // getHealth godoc
@@ -14,8 +15,16 @@ import (
 //	@Accept			json
 //	@Produce		application/json
 //	@Success		200	{object}	model.Message	"response"
-//	@failure		400	{object}	model.Message	"error"
-//	@Router			/health/getHealth [get]
-func (c *Controller) GetHealth(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})
+//	@failure		500	{object}	model.Message	"error"
+//
+// @Security Authorization
+//
+//	@Router			/health/gethealth [get]
+func (c *Controller) GetHealth(w http.ResponseWriter, r *http.Request) {
+	message := model.Message{
+		Message: "OK",
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(message)
 }

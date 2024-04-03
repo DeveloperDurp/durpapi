@@ -7,7 +7,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
+	"gitlab.com/DeveloperDurp/DurpAPI/model"
 )
 
 type ChatRequest struct {
@@ -32,22 +32,35 @@ type Response struct {
 //	@failure		400		{object}	model.Message	"error"
 //
 //	@Router			/openai/general [get]
-func (c *Controller) GeneralOpenAI(ctx *gin.Context) {
+func (c *Controller) GeneralOpenAI(w http.ResponseWriter, r *http.Request) {
+	contentType := r.Header.Get("Content-Type")
 	var req ChatRequest
 
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		req.Message = ctx.Query("message")
+	if contentType == "application/json" {
+		err := json.NewDecoder(r.Body).Decode(&req)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
+			return
+		}
+	} else {
+		queryParams := r.URL.Query()
+		req.Message = queryParams.Get("message")
 	}
 
 	result, err := c.createChatCompletion(req.Message, "mistral:instruct")
 	if err != nil {
-		err := ctx.AbortWithError(http.StatusInternalServerError, err)
-		if err != nil {
-			fmt.Println("Failed to send message")
-		}
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
+		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": result})
+	message := model.Message{
+		Message: result,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(message)
 }
 
 // TravelAgentOpenAI godoc
@@ -61,23 +74,37 @@ func (c *Controller) GeneralOpenAI(ctx *gin.Context) {
 //	@Success		200		{object}	model.Message	"response"
 //	@failure		400		{object}	model.Message	"error"
 //	@Router			/openai/travelagent [get]
-func (c *Controller) TravelAgentOpenAI(ctx *gin.Context) {
+func (c *Controller) TravelAgentOpenAI(w http.ResponseWriter, r *http.Request) {
+	contentType := r.Header.Get("Content-Type")
 	var req ChatRequest
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		req.Message = ctx.Query("message")
+
+	if contentType == "application/json" {
+		err := json.NewDecoder(r.Body).Decode(&req)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
+			return
+		}
+	} else {
+		queryParams := r.URL.Query()
+		req.Message = queryParams.Get("message")
 	}
 
 	req.Message = "I want you to act as a travel guide. I will give you my location and you will give me suggestions. " + req.Message
 
-	result, err := c.createChatCompletion(req.Message, "openchat")
+	result, err := c.createChatCompletion(req.Message, "mistral:instruct")
 	if err != nil {
-		err := ctx.AbortWithError(http.StatusInternalServerError, err)
-		if err != nil {
-			fmt.Println("Failed to send message")
-		}
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
+		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": result})
+	message := model.Message{
+		Message: result,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(message)
 }
 
 func (c *Controller) createChatCompletion(message string, model string) (string, error) {

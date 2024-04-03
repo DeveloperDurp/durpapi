@@ -6,47 +6,6 @@ definitions:
         example: message
         type: string
     type: object
-  model.PowerSupply:
-    properties:
-      3v_load:
-        type: integer
-      3v_watts:
-        type: integer
-      5v_load:
-        type: integer
-      5v_watts:
-        type: integer
-      12v_load:
-        type: integer
-      12v_watts:
-        type: integer
-      capacity:
-        type: string
-      efficiency:
-        type: integer
-      fan_rpm:
-        type: integer
-      load:
-        type: integer
-      poweredon:
-        type: string
-      poweredon_raw:
-        type: string
-      product:
-        type: string
-      temp1:
-        type: integer
-      temp2:
-        type: integer
-      uptime:
-        type: string
-      uptime_raw:
-        type: string
-      vendor:
-        type: string
-      watts:
-        type: integer
-    type: object
 info:
   contact:
     email: developerdurp@durp.info
@@ -59,7 +18,7 @@ info:
   termsOfService: http://swagger.io/terms/
   title: DurpAPI
 paths:
-  /health/getHealth:
+  /health/gethealth:
     get:
       consumes:
       - application/json
@@ -71,10 +30,12 @@ paths:
           description: response
           schema:
             $ref: '#/definitions/model.Message'
-        "400":
+        "500":
           description: error
           schema:
             $ref: '#/definitions/model.Message'
+      security:
+      - Authorization: []
       summary: Generate Health status
       tags:
       - health
@@ -195,27 +156,8 @@ paths:
       summary: Travel Agent ChatGPT
       tags:
       - openai
-  /unraid/powerusage:
-    get:
-      consumes:
-      - application/json
-      description: Gets the PSU Data from unraid
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: response
-          schema:
-            $ref: '#/definitions/model.PowerSupply'
-        "412":
-          description: error
-          schema:
-            $ref: '#/definitions/model.Message'
-      summary: Unraid PSU Stats
-      tags:
-      - unraid
 securityDefinitions:
-  ApiKeyAuth:
+  Authorization:
     in: header
     name: Authorization
     type: apiKey
