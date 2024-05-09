@@ -8,6 +8,7 @@ include:
       - 'jobs/version.yml'
 
 variables:
+  PARENT_PIPELINE_ID: $CI_PIPELINE_ID
   GO_VERSION: "1.22"
   GOLANGCI_LINT_VERISON: "v1.58.0"
   UPLOAD_PACKAGE: "false"
@@ -16,11 +17,9 @@ version:
   extends: .version
   stage: .pre
 
-build_go:
+build:
   stage: deploy
   allow_failure: false
-  variables:
-    PARENT_PIPELINE_ID: $CI_PIPELINE_ID
   trigger: 
     include: 
     - project: 'developerdurp/yml'
@@ -36,7 +35,8 @@ build_go:
 deploy_staging:
   stage: deploy
   needs:
-    - job: build_go
+    - job: build
+      optional: true
   script:
     - echo "Deploy to staging server"
   environment:
