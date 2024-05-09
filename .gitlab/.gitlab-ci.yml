@@ -19,6 +19,8 @@ version:
 build_go:
   stage: deploy
   allow_failure: false
+  variables:
+    PARENT_PIPELINE_ID: $CI_PIPELINE_ID
   trigger: 
     include: 
     - project: 'developerdurp/yml'
