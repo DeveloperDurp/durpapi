@@ -12,6 +12,7 @@ variables:
   GO_VERSION: "1.22"
   GOLANGCI_LINT_VERISON: "v1.58.0"
   UPLOAD_PACKAGE: "false"
+  PROJECT_NAME: $CI_PROJECT_NAME
 
 version:
   extends: .version
