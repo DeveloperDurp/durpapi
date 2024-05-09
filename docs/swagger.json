@@ -14,7 +14,7 @@
             "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
         }
     },
-    "basePath": "/api",
+    "basePath": "/",
     "paths": {
         "/health/gethealth": {
             "get": {
@@ -78,7 +78,7 @@
                     "500": {
                         "description": "error",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardError"
                         }
                     }
                 }
@@ -119,7 +119,7 @@
                     "500": {
                         "description": "error",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardError"
                         }
                     }
                 }
@@ -160,7 +160,7 @@
                     "500": {
                         "description": "error",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardError"
                         }
                     }
                 }
@@ -260,6 +260,23 @@
                 "message": {
                     "type": "string",
                     "example": "message"
+                }
+            }
+        },
+        "stdmodels.StandardError": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
                 }
             }
         }

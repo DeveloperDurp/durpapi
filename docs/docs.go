@@ -86,7 +86,7 @@ const docTemplate = `{
                     "500": {
                         "description": "error",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardError"
                         }
                     }
                 }
@@ -127,7 +127,7 @@ const docTemplate = `{
                     "500": {
                         "description": "error",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardError"
                         }
                     }
                 }
@@ -168,7 +168,7 @@ const docTemplate = `{
                     "500": {
                         "description": "error",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardError"
                         }
                     }
                 }
@@ -270,6 +270,23 @@ const docTemplate = `{
                     "example": "message"
                 }
             }
+        },
+        "stdmodels.StandardError": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
         }
     },
     "securityDefinitions": {
@@ -285,7 +302,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "",
 	Host:             "",
-	BasePath:         "/api",
+	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "DurpAPI",
 	Description:      "API for Durp's needs",

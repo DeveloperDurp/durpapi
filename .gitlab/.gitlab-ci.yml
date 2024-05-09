@@ -1,5 +1,31 @@
-include:
-  - local: .variables.yml
-  - project: 'developerdurp/yml'
-    ref: main
-    file: 'pipeline.yml'
+stages:
+  - deploy
+
+variables:
+  GO_VERSION: "1.22"
+  GOLANGCI_LINT_VERISON: "v1.58.0"
+  UPLOAD_PACKAGE: "false"
+
+build_go:
+  stage: deploy
+  allow_failure: false
+  trigger: 
+    include: 
+    - project: 'developerdurp/yml'
+      ref: 'main'
+      file:
+        - 'pipelines/go-build.yml'
+    strategy: depend
+  rules:
+    - exists:
+      - "go.mod"  
+
+
+  deploy_staging:
+  stage: deploy
+  needs:
+    - job: build_go
+  script:
+    - echo "Deploy to staging server"
+  environment:
+    name: staging

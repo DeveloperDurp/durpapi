@@ -1,10 +1,10 @@
 package controller
 
 import (
-	"encoding/json"
 	"net/http"
 
-	"gitlab.com/DeveloperDurp/DurpAPI/model"
+	"gitlab.com/developerdurp/logger"
+	"gitlab.com/developerdurp/stdmodels"
 )
 
 // getHealth godoc
@@ -21,10 +21,6 @@ import (
 //
 //	@Router			/health/gethealth [get]
 func (c *Controller) GetHealth(w http.ResponseWriter, r *http.Request) {
-	message := model.Message{
-		Message: "OK",
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(message)
+	logger.LogInfo("Health Check")
+	stdmodels.SuccessResponse("OK", w, http.StatusOK)
 }
