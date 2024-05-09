@@ -21,7 +21,7 @@ build_go:
       - "go.mod"  
 
 
-  deploy_staging:
+deploy_staging:
   stage: deploy
   needs:
     - job: build_go
