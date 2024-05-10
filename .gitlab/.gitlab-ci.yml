@@ -43,6 +43,8 @@ generate-config-staging:
 
 child-pipeline-staging:
   stage: staging
+  environment:
+    name: "staging"
   needs:
     - job: generate-config-staging
   trigger:
@@ -64,6 +66,8 @@ generate-config-production:
 
 child-pipeline-production:
   stage: production
+  environment:
+    name: "production"
   needs:
     - job: generate-config-production
   trigger:
