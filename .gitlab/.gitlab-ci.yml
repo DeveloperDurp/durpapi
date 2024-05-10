@@ -1,5 +1,7 @@
 stages:
   - deploy
+  - staging
+  - production
 
 include:
   - project: 'developerdurp/yml'
@@ -33,16 +35,35 @@ version:
     #    - exists:
     #      - "go.mod"  
 
-generate-config:
+generate-config-staging:
   extends: .generate-config
-  stage: deploy
-    #needs:
-    #  - job: build
+  stage: staging
+  variables:
+    ENVIRONMENT: "staging"
 
-child-pipeline:
-  stage: deploy
+child-pipeline-staging:
+  stage: staging
   needs:
-    - job: generate-config
+    - job: generate-config-staging
+  trigger:
+    include:
+      - artifact: generated-config.yml
+        job: generate-config
+
+generate-config-production:
+  extends: .generate-config
+  stage: production
+  when: manual
+  needs:
+    - job: generate-config-staging
+    - job: child-pipeline-staging
+  variables:
+    ENVIRONMENT: "production"
+
+child-pipeline-production:
+  stage: production
+  needs:
+    - job: generate-config-production
   trigger:
     include:
       - artifact: generated-config.yml
