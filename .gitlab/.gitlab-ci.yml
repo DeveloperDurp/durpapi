@@ -6,6 +6,7 @@ include:
     ref: 'main'
     file: 
       - 'jobs/version.yml'
+      - 'jobs/gitlab.yml'
 
 variables:
   PARENT_PIPELINE_ID: $CI_PIPELINE_ID
@@ -18,27 +19,29 @@ version:
   extends: .version
   stage: .pre
 
-build:
-  stage: deploy
-  allow_failure: false
-  trigger: 
-    include: 
-    - project: 'developerdurp/yml'
-      ref: 'main'
-      file:
-        - 'pipelines/go-build.yml'
-    strategy: depend
-  rules:
-    - exists:
-      - "go.mod"  
+    #build:
+    #  stage: deploy
+    #  allow_failure: false
+    #  trigger: 
+    #    include: 
+    #    - project: 'developerdurp/yml'
+    #      ref: 'main'
+    #      file:
+    #        - 'pipelines/go-build.yml'
+    #    strategy: depend
+    #  rules:
+    #    - exists:
+    #      - "go.mod"  
 
-
-deploy_staging:
+generate-config:
+  extends: .generate-config
   stage: deploy
-  needs:
-    - job: build
-      optional: true
-  script:
-    - echo "Deploy to staging server"
-  environment:
-    name: staging
+    #needs:
+    #  - job: build
+
+child-pipeline:
+  stage: deploy
+  trigger:
+    include:
+      - artifact: generated-config.yml
+        job: generate-config
