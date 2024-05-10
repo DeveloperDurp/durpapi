@@ -41,6 +41,8 @@ generate-config:
 
 child-pipeline:
   stage: deploy
+  needs:
+    - job: generate-config
   trigger:
     include:
       - artifact: generated-config.yml
