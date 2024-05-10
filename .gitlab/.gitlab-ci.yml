@@ -48,7 +48,7 @@ child-pipeline-staging:
   trigger:
     include:
       - artifact: generated-config.yml
-        job: generate-config
+        job: generate-config-staging
 
 generate-config-production:
   extends: .generate-config
@@ -67,4 +67,4 @@ child-pipeline-production:
   trigger:
     include:
       - artifact: generated-config.yml
-        job: generate-config
+        job: generate-config-production
