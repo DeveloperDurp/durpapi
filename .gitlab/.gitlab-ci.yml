@@ -55,6 +55,8 @@ generate-config-production:
   stage: production
   when: manual
   needs:
+    - job: version
+      artifacts: true
     - job: generate-config-staging
     - job: child-pipeline-staging
   variables:
