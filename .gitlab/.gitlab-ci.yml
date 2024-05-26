@@ -7,7 +7,11 @@ variables:
   VAULT_SERVER_URL: https://vault.internal.durp.info
   VAULT_AUTH_ROLE: gitlab
 
-job_using_vault:
+test:
+  stage: deploy
+  image: registry.internal.durp.info/debian:latest
+  script:
+    - echo $DATABASE_PASSWORD
   id_tokens:
     VAULT_ID_TOKEN:
       aud: https://gitlab.com
@@ -15,12 +19,6 @@ job_using_vault:
     DATABASE_PASSWORD:
       vault: gitlab-ci/test/test
       token: $VAULT_ID_TOKEN
-
-test:
-  stage: deploy
-  image: registry.internal.durp.info/debian:latest
-  script:
-    - echo $DATABASE_PASSWORD
     #include:
     #  - project: 'developerdurp/yml'
     #    ref: 'main'
