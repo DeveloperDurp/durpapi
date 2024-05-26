@@ -17,7 +17,7 @@ test:
       aud: https://gitlab.com
   secrets:
     DATABASE_PASSWORD:
-      vault: gitlab-ci/test/test@secerts
+      vault: gitlab-ci/test/test@secrets
       token: $VAULT_ID_TOKEN
     #include:
     #  - project: 'developerdurp/yml'
