@@ -3,74 +3,88 @@ stages:
   - staging
   - production
 
-include:
-  - project: 'developerdurp/yml'
-    ref: 'main'
-    file: 
-      - 'jobs/version.yml'
-      - 'jobs/gitlab.yml'
-
 variables:
-  PARENT_PIPELINE_ID: $CI_PIPELINE_ID
-  GO_VERSION: "1.22"
-  GOLANGCI_LINT_VERISON: "v1.58.0"
-  UPLOAD_PACKAGE: "false"
-  PROJECT_NAME: $CI_PROJECT_NAME
+  VAULT_SERVER_URL: https://vault.internal.durp.info
+  VAULT_AUTH_ROLE: gitlab
 
-version:
-  extends: .version
-  stage: .pre
+job_using_vault:
+  id_tokens:
+    VAULT_ID_TOKEN:
+      aud: https://gitlab.com
+  secrets:
+    DATABASE_PASSWORD:
+      vault: gitlab-ci/test/test
+      token: $VAULT_ID_TOKEN
 
-    #build:
-    #  stage: deploy
-    #  allow_failure: false
-    #  trigger: 
-    #    include: 
-    #    - project: 'developerdurp/yml'
-    #      ref: 'main'
-    #      file:
-    #        - 'pipelines/go-build.yml'
-    #    strategy: depend
-    #  rules:
-    #    - exists:
-    #      - "go.mod"  
-
-generate-config-staging:
-  extends: .generate-config
-  stage: staging
-  variables:
-    ENVIRONMENT: "staging"
-
-child-pipeline-staging:
-  stage: staging
-  environment:
-    name: "staging"
-  needs:
-    - job: generate-config-staging
-  trigger:
-    include:
-      - artifact: generated-config.yml
-        job: generate-config-staging
-
-generate-config-production:
-  extends: .generate-config
-  stage: production
-  when: manual
-  needs:
-    - job: version
-      artifacts: true
-    - job: generate-config-staging
-    - job: child-pipeline-staging
-  variables:
-    ENVIRONMENT: "production"
-
-child-pipeline-production:
-  stage: production
-  environment:
-    name: "production"
-  needs:
-    - job: generate-config-production
-  trigger:
-    include:
-      - artifact: generated-config.yml
-        job: generate-config-production
+test:
+  stage: deploy
+  image: registry.internal.durp.info/debian:latest
+  script:
+    - echo $DATABASE_PASSWORD
+    #include:
+    #  - project: 'developerdurp/yml'
+    #    ref: 'main'
+    #    file:
+    #      - 'jobs/version.yml'
+    #      - 'jobs/gitlab.yml'
+    #
+    #variables:
+    #  PARENT_PIPELINE_ID: $CI_PIPELINE_ID
+    #  GO_VERSION: "1.22"
+    #  GOLANGCI_LINT_VERISON: "v1.58.0"
+    #  UPLOAD_PACKAGE: "false"
+    #  PROJECT_NAME: $CI_PROJECT_NAME
+    #
+    #version:
+    #  extends: .version
+    #  stage: .pre
+    #
+    #    #build:
+    #    #  stage: deploy
+    #    #  allow_failure: false
+    #    #  trigger:
+    #    #    include:
+    #    #    - project: 'developerdurp/yml'
+    #    #      ref: 'main'
+    #    #      file:
+    #    #        - 'pipelines/go-build.yml'
+    #    #    strategy: depend
+    #    #  rules:
+    #    #    - exists:
+    #    #      - "go.mod"
+    #
+    #generate-config-staging:
+    #  extends: .generate-config
+    #  stage: staging
+    #  variables:
+    #    ENVIRONMENT: "staging"
+    #
+    #child-pipeline-staging:
+    #  stage: staging
+    #  needs:
+    #    - job: generate-config-staging
+    #  trigger:
+    #    include:
+    #      - artifact: generated-config.yml
+    #        job: generate-config-staging
+    #
+    #generate-config-production:
+    #  extends: .generate-config
+    #  stage: production
+    #  when: manual
+    #  needs:
+    #    - job: version
+    #      artifacts: true
+    #    - job: generate-config-staging
+    #    - job: child-pipeline-staging
+    #  variables:
+    #    ENVIRONMENT: "production"
+    #
+    #child-pipeline-production:
+    #  stage: production
+    #  needs:
+    #    - job: generate-config-production
+    #  trigger:
+    #    include:
+    #      - artifact: generated-config.yml
+    #        job: generate-config-production
