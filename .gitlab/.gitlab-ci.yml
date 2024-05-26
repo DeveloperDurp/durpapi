@@ -5,7 +5,7 @@ stages:
 
 variables:
   VAULT_SERVER_URL: https://vault.internal.durp.info
-  VAULT_AUTH_ROLE: myproject-production
+  VAULT_AUTH_ROLE: test
 
 test:
   stage: deploy
