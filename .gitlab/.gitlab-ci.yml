@@ -6,6 +6,7 @@ stages:
 variables:
   VAULT_SERVER_URL: https://vault.internal.durp.info
   VAULT_AUTH_ROLE: gitlab
+  VAULT_AUTH_PATH: jwt
 
 test:
   stage: deploy
@@ -17,7 +18,7 @@ test:
       aud: https://vault.internal.durp.info
   secrets:
     test:
-      vault: secrets/gitlab-ci/test@secrets
+      vault: gitlab-ci/test@secrets
 
     #include:
     #  - project: 'developerdurp/yml'
