@@ -11,14 +11,13 @@ test:
   stage: deploy
   image: registry.internal.durp.info/debian:latest
   script:
-    - echo $DATABASE_PASSWORD
+    - echo $test
   id_tokens:
     VAULT_ID_TOKEN:
-      aud: https://gitlab.com
+      aud: https://vault.internal.durp.info
   secrets:
-    DATABASE_PASSWORD:
-      vault: gitlab-ci/test/test@secrets
-      token: $VAULT_ID_TOKEN
+    test:
+      vault: secrets/gitlab-ci/test@secrets
 
     #include:
     #  - project: 'developerdurp/yml'
