@@ -17,7 +17,7 @@ test:
       aud: https://vault.internal.durp.info
   secrets:
     test:
-      vault: gitlab-ci/test@secrets
+      vault: secrets/gitlab-ci/test@secrets
 
     #include:
     #  - project: 'developerdurp/yml'
