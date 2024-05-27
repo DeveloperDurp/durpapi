@@ -13,6 +13,7 @@ test:
   image: registry.internal.durp.info/debian:latest
   script:
     - echo $test
+    - echo $VAULT_ID_TOKEN
   id_tokens:
     VAULT_ID_TOKEN:
       aud: https://vault.internal.durp.info
