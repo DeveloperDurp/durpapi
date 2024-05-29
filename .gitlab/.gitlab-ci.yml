@@ -16,6 +16,8 @@ variables:
   GOLANGCI_LINT_VERISON: "v1.58.0"
   UPLOAD_PACKAGE: "false"
   PROJECT_NAME: $CI_PROJECT_NAME
+  GITLAB_PROJECT_ID: "45028985"
+  GITLAB_CHART_PATH: "durpapi%2FChart.yaml"
 
 version:
   extends: .version
@@ -40,7 +42,7 @@ generate-config-staging:
   extends: .generate-config
   stage: staging
   variables:
-    ENVIRONMENT: "staging"
+    ENVIRONMENT: "dev"
 
 child-pipeline-staging:
   stage: staging
@@ -51,6 +53,7 @@ child-pipeline-staging:
       - artifact: generated-config.yml
         job: generate-config-staging
   variables:
+    ENVIRONMENT: "dev"
     PARENT_PIPELINE_ID: $CI_PIPELINE_ID
 
 generate-config-production:
@@ -63,7 +66,7 @@ generate-config-production:
     - job: generate-config-staging
     - job: child-pipeline-staging
   variables:
-    ENVIRONMENT: "production"
+    ENVIRONMENT: "prd"
 
 child-pipeline-production:
   stage: production
@@ -74,4 +77,5 @@ child-pipeline-production:
       - artifact: generated-config.yml
         job: generate-config-production
   variables:
+    ENVIRONMENT: "prd"
     PARENT_PIPELINE_ID: $CI_PIPELINE_ID
