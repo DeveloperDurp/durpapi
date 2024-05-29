@@ -21,22 +21,21 @@ variables:
 
 version:
   extends: .version
-  stage:
-    .pre
+  stage: .pre
 
-    #build:
-    #  stage: deploy
-    #  allow_failure: false
-    #  trigger:
-    #    include:
-    #    - project: 'developerdurp/yml'
-    #      ref: 'main'
-    #      file:
-    #        - 'pipelines/go-build.yml'
-    #    strategy: depend
-    #  rules:
-    #    - exists:
-    #      - "go.mod"
+build:
+  stage: deploy
+  allow_failure: false
+  trigger:
+    include:
+      - project: "developerdurp/yml"
+        ref: "main"
+        file:
+          - "pipelines/go-build.yml"
+    strategy: depend
+  rules:
+    - exists:
+        - "go.mod"
 
 generate-config-staging:
   extends: .generate-config
