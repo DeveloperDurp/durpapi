@@ -70,7 +70,7 @@ deploy-prd:
   trigger:
     include:
       - artifact: generated-config.yml
-        job: generate-config-prd
+        job: generate-pipeline-prd
     strategy: depend
   variables:
     ENVIRONMENT: "prd"
