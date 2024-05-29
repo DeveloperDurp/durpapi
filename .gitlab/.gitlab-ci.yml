@@ -1,7 +1,6 @@
 stages:
   - deploy
-  - staging
-  - production
+  - release
 
 include:
   - project: "developerdurp/yml"
@@ -37,44 +36,39 @@ build:
     - exists:
         - "go.mod"
 
-generate-config-staging:
+generate-config-dev:
   extends: .generate-config
-  stage: staging
+  stage: release
   variables:
     ENVIRONMENT: "dev"
 
-child-pipeline-staging:
-  stage: staging
+child-pipeline-dev:
+  stage: release
   needs:
-    - job: generate-config-staging
+    - job: build
   trigger:
     include:
       - artifact: generated-config.yml
-        job: generate-config-staging
+        job: generate-config-dev
   variables:
     ENVIRONMENT: "dev"
     PARENT_PIPELINE_ID: $CI_PIPELINE_ID
 
-generate-config-production:
+generate-config-prd:
   extends: .generate-config
-  stage: production
-  when: manual
-  needs:
-    - job: version
-      artifacts: true
-    - job: generate-config-staging
-    - job: child-pipeline-staging
+  stage: release
   variables:
     ENVIRONMENT: "prd"
 
-child-pipeline-production:
-  stage: production
+child-pipeline-prd:
+  stage: release
   needs:
-    - job: generate-config-production
+    - job: generate-config-prd
+  when: manual
   trigger:
     include:
       - artifact: generated-config.yml
-        job: generate-config-production
+        job: generate-config-prd
   variables:
     ENVIRONMENT: "prd"
     PARENT_PIPELINE_ID: $CI_PIPELINE_ID
