@@ -1,5 +1,5 @@
 stages:
-  - deploy
+  - build
   - release
 
 include:
@@ -23,7 +23,7 @@ version:
   stage: .pre
 
 build:
-  stage: deploy
+  stage: build
   allow_failure: false
   trigger:
     include:
@@ -36,39 +36,42 @@ build:
     - exists:
         - "go.mod"
 
-generate-config-dev:
+generate-pipeline-dev:
   extends: .generate-config
-  stage: release
+  stage: build
   variables:
     ENVIRONMENT: "dev"
 
-child-pipeline-dev:
+deploy-dev:
   stage: release
   needs:
     - job: build
   trigger:
     include:
       - artifact: generated-config.yml
-        job: generate-config-dev
+        job: generate-pipeline-dev
+    strategy: depend
   variables:
     ENVIRONMENT: "dev"
     PARENT_PIPELINE_ID: $CI_PIPELINE_ID
 
-generate-config-prd:
+generate-pipeline-prd:
   extends: .generate-config
-  stage: release
+  stage: build
   variables:
     ENVIRONMENT: "prd"
 
-child-pipeline-prd:
+deploy-prd:
   stage: release
   needs:
-    - job: generate-config-prd
+    - job: deploy-dev
+    - job: generate-pipeline-prd
   when: manual
   trigger:
     include:
       - artifact: generated-config.yml
         job: generate-config-prd
+    strategy: depend
   variables:
     ENVIRONMENT: "prd"
     PARENT_PIPELINE_ID: $CI_PIPELINE_ID
