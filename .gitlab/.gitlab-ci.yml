@@ -50,6 +50,8 @@ child-pipeline-staging:
     include:
       - artifact: generated-config.yml
         job: generate-config-staging
+  variables:
+    PARENT_PIPELINE_ID: $CI_PIPELINE_ID
 
 generate-config-production:
   extends: .generate-config
@@ -71,3 +73,5 @@ child-pipeline-production:
     include:
       - artifact: generated-config.yml
         job: generate-config-production
+  variables:
+    PARENT_PIPELINE_ID: $CI_PIPELINE_ID
