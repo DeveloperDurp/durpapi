@@ -1,11 +1,16 @@
-package controller
+package health
 
 import (
 	"net/http"
 
-	"gitlab.com/developerdurp/logger"
 	"gitlab.com/developerdurp/stdmodels"
 )
+
+type Handler struct{}
+
+func NewHandler() (*Handler, error) {
+	return &Handler{}, nil
+}
 
 // getHealth godoc
 //
@@ -14,13 +19,12 @@ import (
 //	@Tags			health
 //	@Accept			json
 //	@Produce		application/json
-//	@Success		200	{object}	model.Message	"response"
-//	@failure		500	{object}	model.Message	"error"
+//	@Success		200		{object}	stdmodels.StandardMessage	"response"
+//	@failure		500	{object}	stdmodels.StandardError"error"
 //
 // @Security Authorization
 //
 //	@Router			/health/gethealth [get]
-func (c *Controller) GetHealth(w http.ResponseWriter, r *http.Request) {
-	logger.LogInfo("Health Check")
+func (h *Handler) Get(w http.ResponseWriter, r *http.Request) {
 	stdmodels.SuccessResponse("OK", w, http.StatusOK)
 }

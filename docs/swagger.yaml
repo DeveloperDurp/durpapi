@@ -1,11 +1,5 @@
 basePath: /
 definitions:
-  model.Message:
-    properties:
-      message:
-        example: message
-        type: string
-    type: object
   stdmodels.StandardError:
     properties:
       description:
@@ -16,6 +10,11 @@ definitions:
         type: string
       status:
         type: integer
+    type: object
+  stdmodels.StandardMessage:
+    properties:
+      message:
+        type: string
     type: object
 info:
   contact:
@@ -40,11 +39,11 @@ paths:
         "200":
           description: response
           schema:
-            $ref: '#/definitions/model.Message'
+            $ref: '#/definitions/stdmodels.StandardMessage'
         "500":
           description: error
           schema:
-            $ref: '#/definitions/model.Message'
+            $ref: '#/definitions/stdmodels.StandardError'
       security:
       - Authorization: []
       summary: Generate Health status
@@ -67,7 +66,7 @@ paths:
         "200":
           description: response
           schema:
-            $ref: '#/definitions/model.Message'
+            $ref: '#/definitions/stdmodels.StandardMessage'
         "500":
           description: error
           schema:
@@ -87,7 +86,7 @@ paths:
         "200":
           description: response
           schema:
-            $ref: '#/definitions/model.Message'
+            $ref: '#/definitions/stdmodels.StandardMessage'
         "500":
           description: error
           schema:
@@ -113,7 +112,7 @@ paths:
         "200":
           description: response
           schema:
-            $ref: '#/definitions/model.Message'
+            $ref: '#/definitions/stdmodels.StandardMessage'
         "500":
           description: error
           schema:
@@ -140,11 +139,11 @@ paths:
         "200":
           description: response
           schema:
-            $ref: '#/definitions/model.Message'
-        "400":
+            $ref: '#/definitions/stdmodels.StandardMessage'
+        "500":
           description: error
           schema:
-            $ref: '#/definitions/model.Message'
+            $ref: '#/definitions/stdmodels.StandardError'
       security:
       - Authorization: []
       summary: Gerneral ChatGPT
@@ -167,11 +166,11 @@ paths:
         "200":
           description: response
           schema:
-            $ref: '#/definitions/model.Message'
-        "400":
+            $ref: '#/definitions/stdmodels.StandardMessage'
+        "500":
           description: error
           schema:
-            $ref: '#/definitions/model.Message'
+            $ref: '#/definitions/stdmodels.StandardError'
       security:
       - Authorization: []
       summary: Travel Agent ChatGPT

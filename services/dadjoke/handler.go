@@ -1,14 +1,29 @@
-package controller
+package dadjoke
 
 import (
 	"encoding/json"
 	"net/http"
 
-	"gitlab.com/DeveloperDurp/DurpAPI/model"
-	"gitlab.com/DeveloperDurp/DurpAPI/service"
 	"gitlab.com/developerdurp/logger"
 	"gitlab.com/developerdurp/stdmodels"
+	"gorm.io/gorm"
 )
+
+type Handler struct {
+	db *gorm.DB
+}
+
+type DadJoke struct {
+	JOKE string `json:"joke"`
+}
+
+func NewHandler(db *gorm.DB) (*Handler, error) {
+	err := db.AutoMigrate(&DadJoke{})
+	if err != nil {
+		return nil, err
+	}
+	return &Handler{db: db}, nil
+}
 
 // GetDadJoke godoc
 //
@@ -17,23 +32,21 @@ import (
 //	@Tags			DadJoke
 //	@Accept			json
 //	@Produce		application/json
-//	@Success		200	{object}	model.Message	"response"
+//	@Success		200	{object}	stdmodels.StandardMessage	"response"
 //	@failure		500	{object}	stdmodels.StandardError"error"
 //
 // @Security Authorization
 //
 //	@Router			/jokes/dadjoke [get]
-func (c *Controller) GetDadJoke(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
-	joke, err := service.GetRandomDadJoke(c.Db.DB)
+func (h *Handler) Get(w http.ResponseWriter, r *http.Request) {
+	joke, err := h.GetRandomDadJoke()
 
 	if err != nil {
 		stdmodels.FailureReponse("Failed to get Joke", w, http.StatusInternalServerError, []string{err.Error()})
 		return
 	}
 
-	message := model.Message{
+	message := stdmodels.StandardMessage{
 		Message: joke,
 	}
 
@@ -48,15 +61,15 @@ func (c *Controller) GetDadJoke(w http.ResponseWriter, r *http.Request) {
 //	@Accept			json
 //	@Produce		application/json
 //	@Param			joke	query		string			true	"Dad Joke you wish to enter into database"
-//	@Success		200		{object}	model.Message	"response"
+//	@Success		200		{object}	stdmodels.StandardMessage	"response"
 //	@failure		500	{object}	stdmodels.StandardError"error"
 //
 // @Security Authorization
 //
 //	@Router			/jokes/dadjoke [post]
-func (c *Controller) PostDadJoke(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
 	contentType := r.Header.Get("Content-Type")
-	var req model.DadJoke
+	var req DadJoke
 
 	if contentType == "application/json" {
 		err := json.NewDecoder(r.Body).Decode(&req)
@@ -69,7 +82,7 @@ func (c *Controller) PostDadJoke(w http.ResponseWriter, r *http.Request) {
 		req.JOKE = queryParams.Get("joke")
 	}
 
-	err := service.PostDadJoke(c.Db.DB, req)
+	err := h.PostDadJoke(req)
 	if err != nil {
 		stdmodels.FailureReponse("Failed to add joke", w, http.StatusInternalServerError, []string{err.Error()})
 		return
@@ -86,15 +99,15 @@ func (c *Controller) PostDadJoke(w http.ResponseWriter, r *http.Request) {
 //	@Accept			json
 //	@Produce		application/json
 //	@Param			joke	query		string			true	"Dad joke you wish to delete from the database"
-//	@Success		200		{object}	model.Message	"response"
+//	@Success		200		{object}	stdmodels.StandardMessage	"response"
 //	@failure		500	{object}	stdmodels.StandardError"error"
 //
 // @Security Authorization
 //
 //	@Router			/jokes/dadjoke [delete]
-func (c *Controller) DeleteDadJoke(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 	contentType := r.Header.Get("Content-Type")
-	var req model.DadJoke
+	var req DadJoke
 
 	if contentType == "application/json" {
 		err := json.NewDecoder(r.Body).Decode(&req)
@@ -108,17 +121,11 @@ func (c *Controller) DeleteDadJoke(w http.ResponseWriter, r *http.Request) {
 		req.JOKE = queryParams.Get("joke")
 	}
 
-	err := service.DeleteDadJoke(c.Db.DB, req)
+	err := h.DeleteDadJoke(req)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
+		stdmodels.FailureReponse("Failed to delete joke", w, http.StatusInternalServerError, []string{err.Error()})
 		return
 	}
 
-	message := model.Message{
-		Message: "OK",
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(message)
+	stdmodels.SuccessResponse("OK", w, http.StatusOK)
 }

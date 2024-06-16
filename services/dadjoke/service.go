@@ -1,16 +1,12 @@
-package service
+package dadjoke
 
 import (
 	"errors"
 	"math/rand"
-
-	"gorm.io/gorm"
-
-	"gitlab.com/DeveloperDurp/DurpAPI/model"
 )
 
-func GetRandomDadJoke(db *gorm.DB) (string, error) {
-	jokes, err := getDadJokes(db)
+func (h *Handler) GetRandomDadJoke() (string, error) {
+	jokes, err := h.getDadJokes()
 	if err != nil {
 		return "", err
 	}
@@ -22,8 +18,8 @@ func GetRandomDadJoke(db *gorm.DB) (string, error) {
 	return randomElement.JOKE, err
 }
 
-func PostDadJoke(db *gorm.DB, joke model.DadJoke) error {
-	jokes, err := getDadJokes(db)
+func (h *Handler) PostDadJoke(joke DadJoke) error {
+	jokes, err := h.getDadJokes()
 	if err != nil {
 		return err
 	}
@@ -39,7 +35,7 @@ func PostDadJoke(db *gorm.DB, joke model.DadJoke) error {
 	if found {
 		return errors.New("Joke is already in database")
 	} else {
-		err = db.Create(&joke).Error
+		err = h.db.Create(&joke).Error
 		if err != nil {
 			return err
 		}
@@ -47,24 +43,24 @@ func PostDadJoke(db *gorm.DB, joke model.DadJoke) error {
 	}
 }
 
-func DeleteDadJoke(db *gorm.DB, joke model.DadJoke) error {
-	check := &model.DadJoke{}
-	db.Where("joke = ?", joke.JOKE).First(check)
+func (h *Handler) DeleteDadJoke(joke DadJoke) error {
+	check := &DadJoke{}
+	h.db.Where("joke = ?", joke.JOKE).First(check)
 	if check.JOKE == "" {
 		return errors.New("Joke does not exist")
 	}
 
-	err := db.Where("joke = ?", joke.JOKE).Delete(joke).Error
+	err := h.db.Where("joke = ?", joke.JOKE).Delete(joke).Error
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func getDadJokes(db *gorm.DB) ([]model.DadJoke, error) {
-	req := []model.DadJoke{}
+func (h *Handler) getDadJokes() ([]DadJoke, error) {
+	req := []DadJoke{}
 
-	err := db.Find(&req).Error
+	err := h.db.Find(&req).Error
 
 	return req, err
 }

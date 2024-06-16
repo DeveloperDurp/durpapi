@@ -1,14 +1,10 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
-
-	"github.com/swaggo/http-swagger"
+	"log"
 
 	"gitlab.com/DeveloperDurp/DurpAPI/controller"
 	"gitlab.com/DeveloperDurp/DurpAPI/docs"
-	"gitlab.com/DeveloperDurp/DurpAPI/middleware"
 )
 
 //	@title			DurpAPI
@@ -33,30 +29,11 @@ func main() {
 	docs.SwaggerInfo.Host = c.Cfg.Host
 	docs.SwaggerInfo.Version = c.Cfg.Version
 
-	router := http.NewServeMux()
-	router.HandleFunc("/swagger/*", httpSwagger.Handler())
-
-	router.HandleFunc("GET /api/health/gethealth", c.GetHealth)
-
-	router.HandleFunc("GET /api/jokes/dadjoke", c.GetDadJoke)
-	router.HandleFunc("POST /api/jokes/dadjoke", c.PostDadJoke)
-	router.HandleFunc("DELETE /api/jokes/dadjoke", c.DeleteDadJoke)
-
-	router.HandleFunc("GET /api/openai/general", c.GeneralOpenAI)
-	router.HandleFunc("GET /api/openai/travelagent", c.TravelAgentOpenAI)
+	if err := c.Run(); err != nil {
+		log.Fatal(err)
+	}
 	// adminRouter := http.NewServeMux()
 
 	// router.Handle("/", middleware.EnsureAdmin(adminRouter))
 
-	stack := middleware.CreateStack(
-		middleware.Logging,
-	)
-
-	server := http.Server{
-		Addr:    ":8080",
-		Handler: stack(router),
-	}
-
-	fmt.Println("Server listening on port :8080")
-	server.ListenAndServe()
 }

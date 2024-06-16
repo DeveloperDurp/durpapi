@@ -38,13 +38,13 @@
                     "200": {
                         "description": "response",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardMessage"
                         }
                     },
                     "500": {
                         "description": "error",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardError"
                         }
                     }
                 }
@@ -72,7 +72,7 @@
                     "200": {
                         "description": "response",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardMessage"
                         }
                     },
                     "500": {
@@ -113,7 +113,7 @@
                     "200": {
                         "description": "response",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardMessage"
                         }
                     },
                     "500": {
@@ -154,7 +154,7 @@
                     "200": {
                         "description": "response",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardMessage"
                         }
                     },
                     "500": {
@@ -197,13 +197,13 @@
                     "200": {
                         "description": "response",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardMessage"
                         }
                     },
-                    "400": {
+                    "500": {
                         "description": "error",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardError"
                         }
                     }
                 }
@@ -240,13 +240,13 @@
                     "200": {
                         "description": "response",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardMessage"
                         }
                     },
-                    "400": {
+                    "500": {
                         "description": "error",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardError"
                         }
                     }
                 }
@@ -254,15 +254,6 @@
         }
     },
     "definitions": {
-        "model.Message": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "message"
-                }
-            }
-        },
         "stdmodels.StandardError": {
             "type": "object",
             "properties": {
@@ -277,6 +268,14 @@
                 },
                 "status": {
                     "type": "integer"
+                }
+            }
+        },
+        "stdmodels.StandardMessage": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
                 }
             }
         }

@@ -46,13 +46,13 @@ const docTemplate = `{
                     "200": {
                         "description": "response",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardMessage"
                         }
                     },
                     "500": {
                         "description": "error",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardError"
                         }
                     }
                 }
@@ -80,7 +80,7 @@ const docTemplate = `{
                     "200": {
                         "description": "response",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardMessage"
                         }
                     },
                     "500": {
@@ -121,7 +121,7 @@ const docTemplate = `{
                     "200": {
                         "description": "response",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardMessage"
                         }
                     },
                     "500": {
@@ -162,7 +162,7 @@ const docTemplate = `{
                     "200": {
                         "description": "response",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardMessage"
                         }
                     },
                     "500": {
@@ -205,13 +205,13 @@ const docTemplate = `{
                     "200": {
                         "description": "response",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardMessage"
                         }
                     },
-                    "400": {
+                    "500": {
                         "description": "error",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardError"
                         }
                     }
                 }
@@ -248,13 +248,13 @@ const docTemplate = `{
                     "200": {
                         "description": "response",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardMessage"
                         }
                     },
-                    "400": {
+                    "500": {
                         "description": "error",
                         "schema": {
-                            "$ref": "#/definitions/model.Message"
+                            "$ref": "#/definitions/stdmodels.StandardError"
                         }
                     }
                 }
@@ -262,15 +262,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "model.Message": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "message"
-                }
-            }
-        },
         "stdmodels.StandardError": {
             "type": "object",
             "properties": {
@@ -285,6 +276,14 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "integer"
+                }
+            }
+        },
+        "stdmodels.StandardMessage": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
                 }
             }
         }
