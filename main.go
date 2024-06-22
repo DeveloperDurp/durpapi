@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"gitlab.com/DeveloperDurp/DurpAPI/controller"
+	"gitlab.com/DeveloperDurp/DurpAPI/cmd"
 	"gitlab.com/DeveloperDurp/DurpAPI/docs"
 )
 

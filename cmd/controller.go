@@ -12,9 +12,9 @@ import (
 	"gorm.io/gorm"
 
 	"gitlab.com/DeveloperDurp/DurpAPI/middleware"
-	"gitlab.com/DeveloperDurp/DurpAPI/services/dadjoke"
-	"gitlab.com/DeveloperDurp/DurpAPI/services/health"
-	"gitlab.com/DeveloperDurp/DurpAPI/services/openai"
+	"gitlab.com/DeveloperDurp/DurpAPI/pkg/dadjoke"
+	"gitlab.com/DeveloperDurp/DurpAPI/pkg/health"
+	"gitlab.com/DeveloperDurp/DurpAPI/pkg/openai"
 	"gitlab.com/developerdurp/stdmodels"
 )
 
@@ -103,16 +103,16 @@ func (c *Controller) loadAll(router *http.ServeMux) error {
 	router.HandleFunc("/swagger/*", httpSwagger.Handler())
 
 	health, err := health.NewHandler()
-	router.HandleFunc("GET /api/health/gethealth", health.Get)
+	router.HandleFunc("GET /health/gethealth", health.Get)
 
 	dadjoke, err := dadjoke.NewHandler(c.Db)
-	router.HandleFunc("GET /api/jokes/dadjoke", dadjoke.Get)
-	router.HandleFunc("POST /api/jokes/dadjoke", dadjoke.Post)
-	router.HandleFunc("DELETE /api/jokes/dadjoke", dadjoke.Delete)
+	router.HandleFunc("GET /jokes/dadjoke", dadjoke.Get)
+	router.HandleFunc("POST /jokes/dadjoke", dadjoke.Post)
+	router.HandleFunc("DELETE /jokes/dadjoke", dadjoke.Delete)
 
 	openai, err := openai.NewHandler(c.Cfg.LlamaURL)
-	router.HandleFunc("GET /api/openai/general", openai.GeneralOpenAI)
-	router.HandleFunc("GET /api/openai/travelagent", openai.TravelAgentOpenAI)
+	router.HandleFunc("GET /openai/general", openai.GeneralOpenAI)
+	router.HandleFunc("GET /openai/travelagent", openai.TravelAgentOpenAI)
 
 	if err != nil {
 		return err
