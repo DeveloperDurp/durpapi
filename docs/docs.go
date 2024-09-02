@@ -36,7 +36,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "produces": [
-                    "application/json"
+                    "application/jso"
                 ],
                 "tags": [
                     "health"
@@ -80,7 +80,7 @@ const docTemplate = `{
                     "200": {
                         "description": "response",
                         "schema": {
-                            "$ref": "#/definitions/stdmodels.StandardMessage"
+                            "$ref": "#/definitions/dadjoke.DadJoke"
                         }
                     },
                     "500": {
@@ -262,6 +262,14 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "dadjoke.DadJoke": {
+            "type": "object",
+            "properties": {
+                "joke": {
+                    "type": "string"
+                }
+            }
+        },
         "stdmodels.StandardError": {
             "type": "object",
             "properties": {
@@ -282,8 +290,9 @@ const docTemplate = `{
         "stdmodels.StandardMessage": {
             "type": "object",
             "properties": {
-                "message": {
-                    "type": "string"
+                "message": {},
+                "status": {
+                    "type": "integer"
                 }
             }
         }

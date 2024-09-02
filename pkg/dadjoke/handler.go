@@ -1,10 +1,9 @@
 package dadjoke
 
 import (
-	"encoding/json"
+	"gitlab.com/DeveloperDurp/DurpAPI/pkg/shared"
 	"net/http"
 
-	"gitlab.com/developerdurp/logger"
 	"gitlab.com/developerdurp/stdmodels"
 	"gorm.io/gorm"
 )
@@ -32,25 +31,25 @@ func NewHandler(db *gorm.DB) (*Handler, error) {
 //	@Tags			DadJoke
 //	@Accept			json
 //	@Produce		application/json
-//	@Success		200	{object}	stdmodels.StandardMessage	"response"
+//	@Success		200	{object}	DadJoke	"response"
 //	@failure		500	{object}	stdmodels.StandardError"error"
 //
-// @Security Authorization
+//	@Security		Authorization
 //
 //	@Router			/jokes/dadjoke [get]
-func (h *Handler) Get(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Get(w http.ResponseWriter, r *http.Request) (*stdmodels.StandardMessage, error) {
 	joke, err := h.GetRandomDadJoke()
 
 	if err != nil {
-		stdmodels.FailureReponse("Failed to get Joke", w, http.StatusInternalServerError, []string{err.Error()})
-		return
+		resp := stdmodels.NewFailureResponse("Failed to get Joke",
+			http.StatusInternalServerError,
+			[]string{err.Error()},
+		)
+		return nil, resp
 	}
 
-	message := stdmodels.StandardMessage{
-		Message: joke,
-	}
-
-	json.NewEncoder(w).Encode(message)
+	resp := stdmodels.NewMessageResponse(joke, http.StatusOK)
+	return resp, nil
 }
 
 // PostDadJoke godoc
@@ -60,35 +59,38 @@ func (h *Handler) Get(w http.ResponseWriter, r *http.Request) {
 //	@Tags			DadJoke
 //	@Accept			json
 //	@Produce		application/json
-//	@Param			joke	query		string			true	"Dad Joke you wish to enter into database"
+//	@Param			joke	query		string						true	"Dad Joke you wish to enter into database"
 //	@Success		200		{object}	stdmodels.StandardMessage	"response"
-//	@failure		500	{object}	stdmodels.StandardError"error"
+//	@failure		500		{object}	stdmodels.StandardError"error"
 //
-// @Security Authorization
+//	@Security		Authorization
 //
 //	@Router			/jokes/dadjoke [post]
-func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
-	contentType := r.Header.Get("Content-Type")
-	var req DadJoke
+func (h *Handler) Post(w http.ResponseWriter, r *http.Request) (*stdmodels.StandardMessage, error) {
 
-	if contentType == "application/json" {
-		err := json.NewDecoder(r.Body).Decode(&req)
-		if err != nil {
-			logger.LogError("Failed to decode json file")
-			return
-		}
-	} else {
-		queryParams := r.URL.Query()
-		req.JOKE = queryParams.Get("joke")
-	}
-
-	err := h.PostDadJoke(req)
+	request, err := shared.GetParams(r, &DadJoke{})
 	if err != nil {
-		stdmodels.FailureReponse("Failed to add joke", w, http.StatusInternalServerError, []string{err.Error()})
-		return
+		resp := stdmodels.NewFailureResponse(
+			"Failed to add Joke",
+			http.StatusInternalServerError,
+			[]string{err.Error()},
+		)
+		return nil, resp
+	}
+	req := *request.(*DadJoke)
+
+	err = h.PostDadJoke(req)
+	if err != nil {
+		resp := stdmodels.NewFailureResponse(
+			"Failed to add Joke",
+			http.StatusInternalServerError,
+			[]string{err.Error()},
+		)
+		return nil, resp
 	}
 
-	stdmodels.SuccessResponse("OK", w, http.StatusOK)
+	resp := stdmodels.NewBasicResponse()
+	return resp, nil
 }
 
 // DeleteDadJoke godoc
@@ -98,34 +100,36 @@ func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
 //	@Tags			DadJoke
 //	@Accept			json
 //	@Produce		application/json
-//	@Param			joke	query		string			true	"Dad joke you wish to delete from the database"
+//	@Param			joke	query		string						true	"Dad joke you wish to delete from the database"
 //	@Success		200		{object}	stdmodels.StandardMessage	"response"
-//	@failure		500	{object}	stdmodels.StandardError"error"
+//	@failure		500		{object}	stdmodels.StandardError"error"
 //
-// @Security Authorization
+//	@Security		Authorization
 //
 //	@Router			/jokes/dadjoke [delete]
-func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
-	contentType := r.Header.Get("Content-Type")
-	var req DadJoke
+func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) (*stdmodels.StandardMessage, error) {
 
-	if contentType == "application/json" {
-		err := json.NewDecoder(r.Body).Decode(&req)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
-			return
-		}
-	} else {
-		queryParams := r.URL.Query()
-		req.JOKE = queryParams.Get("joke")
-	}
-
-	err := h.DeleteDadJoke(req)
+	request, err := shared.GetParams(r, &DadJoke{})
 	if err != nil {
-		stdmodels.FailureReponse("Failed to delete joke", w, http.StatusInternalServerError, []string{err.Error()})
-		return
+		resp := stdmodels.NewFailureResponse(
+			"Failed to delete Joke",
+			http.StatusInternalServerError,
+			[]string{err.Error()},
+		)
+		return nil, resp
+	}
+	req := *request.(*DadJoke)
+
+	err = h.DeleteDadJoke(req)
+	if err != nil {
+		resp := stdmodels.NewFailureResponse(
+			"Failed to delete Joke",
+			http.StatusInternalServerError,
+			[]string{err.Error()},
+		)
+		return nil, resp
 	}
 
-	stdmodels.SuccessResponse("OK", w, http.StatusOK)
+	resp := stdmodels.NewBasicResponse()
+	return resp, nil
 }

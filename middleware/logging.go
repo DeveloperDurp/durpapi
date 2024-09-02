@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"log"
+	"github.com/charmbracelet/log"
 	"net/http"
 	"time"
 )
@@ -27,13 +27,13 @@ func Logging(next http.Handler) http.Handler {
 
 		next.ServeHTTP(wrapped, r)
 
-		//slog.Info(
+		// slog.Info(
 		//	"Health Check",
 		//	slog.Int("Method", wrapped.statusCode),
 		//	r.Method,
 		//	r.URL.Path,
 		//	slog.String("time", time.Since(start).String()),
-		//)
-		log.Println("INFO", wrapped.statusCode, r.Method, r.URL.Path, time.Since(start))
+		// )
+		log.Info("INFO", wrapped.statusCode, r.Method, r.URL.Path, time.Since(start))
 	})
 }

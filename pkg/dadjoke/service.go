@@ -5,17 +5,23 @@ import (
 	"math/rand"
 )
 
-func (h *Handler) GetRandomDadJoke() (string, error) {
+func (h *Handler) GetRandomDadJoke() (DadJoke, error) {
 	jokes, err := h.getDadJokes()
 	if err != nil {
-		return "", err
+		return DadJoke{}, err
+	}
+	if len(jokes) == 0 {
+		return DadJoke{}, errors.New("No Jokes found")
 	}
 
 	randomIndex := rand.Intn(len(jokes))
 
 	randomElement := jokes[randomIndex]
 
-	return randomElement.JOKE, err
+	resp := DadJoke{
+		JOKE: randomElement.JOKE,
+	}
+	return resp, err
 }
 
 func (h *Handler) PostDadJoke(joke DadJoke) error {

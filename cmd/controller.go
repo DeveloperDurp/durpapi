@@ -15,7 +15,7 @@ import (
 	"gitlab.com/DeveloperDurp/DurpAPI/pkg/dadjoke"
 	"gitlab.com/DeveloperDurp/DurpAPI/pkg/health"
 	"gitlab.com/DeveloperDurp/DurpAPI/pkg/openai"
-	"gitlab.com/developerdurp/stdmodels"
+	h "gitlab.com/developerdurp/stdmodels"
 )
 
 type Controller struct {
@@ -61,7 +61,16 @@ func NewController() *Controller {
 		log.Fatalf("unable to parse database variables: %e", err)
 	}
 
-	Db, err := connectDB(controller.Dbcfg)
+	config := fmt.Sprintf(
+		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
+		controller.Dbcfg.Host,
+		controller.Dbcfg.Port,
+		controller.Dbcfg.User,
+		controller.Dbcfg.Password,
+		controller.Dbcfg.DBName,
+		controller.Dbcfg.SSLMode,
+	)
+	Db, err := connectDB(config)
 	if err != nil {
 		panic("Failed to connect to database")
 	}
@@ -99,20 +108,20 @@ func (c *Controller) loadAll(router *http.ServeMux) error {
 
 	// router.Handle("/", middleware.EnsureAdmin(adminRouter))
 
-	router.HandleFunc("/", defaultHandler)
+	router.HandleFunc("/", h.Make(defaultHandler))
 	router.HandleFunc("/swagger/*", httpSwagger.Handler())
 
 	health, err := health.NewHandler()
-	router.HandleFunc("GET /health/gethealth", health.Get)
+	router.HandleFunc("GET /health/gethealth", h.Make(health.Get))
 
 	dadjoke, err := dadjoke.NewHandler(c.Db)
-	router.HandleFunc("GET /jokes/dadjoke", dadjoke.Get)
-	router.HandleFunc("POST /jokes/dadjoke", dadjoke.Post)
-	router.HandleFunc("DELETE /jokes/dadjoke", dadjoke.Delete)
+	router.HandleFunc("GET /jokes/dadjoke", h.Make(dadjoke.Get))
+	router.HandleFunc("POST /jokes/dadjoke", h.Make(dadjoke.Post))
+	router.HandleFunc("DELETE /jokes/dadjoke", h.Make(dadjoke.Delete))
 
 	openai, err := openai.NewHandler(c.Cfg.LlamaURL)
-	router.HandleFunc("GET /openai/general", openai.GeneralOpenAI)
-	router.HandleFunc("GET /openai/travelagent", openai.TravelAgentOpenAI)
+	router.HandleFunc("GET /openai/general", h.Make(openai.GeneralOpenAI))
+	router.HandleFunc("GET /openai/travelagent", h.Make(openai.TravelAgentOpenAI))
 
 	if err != nil {
 		return err
@@ -120,16 +129,17 @@ func (c *Controller) loadAll(router *http.ServeMux) error {
 	return nil
 }
 
-func defaultHandler(w http.ResponseWriter, r *http.Request) {
-	stdmodels.FailureReponse("Page Does not exist", w, http.StatusNotFound, []string{"Page is not found"})
+func defaultHandler(w http.ResponseWriter, r *http.Request) (*h.StandardMessage, error) {
+	resp := h.NewFailureResponse(
+		"Page does not exist",
+		http.StatusNotFound,
+		[]string{"Page not found"},
+	)
+	return nil, resp
 }
 
-func connectDB(config DBConfig) (*gorm.DB, error) {
-	dsn := fmt.Sprintf(
-		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
-		config.Host, config.Port, config.User, config.Password, config.DBName, config.SSLMode,
-	)
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+func connectDB(config string) (*gorm.DB, error) {
+	db, err := gorm.Open(postgres.Open(config), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}

@@ -1,7 +1,7 @@
 package openai
 
 import (
-	"encoding/json"
+	"gitlab.com/DeveloperDurp/DurpAPI/pkg/shared"
 	"net/http"
 
 	"gitlab.com/developerdurp/stdmodels"
@@ -31,35 +31,38 @@ type Response struct {
 //	@Tags			openai
 //	@Accept			json
 //	@Produce		application/json
-//	@Param			message	query		string			true	"Ask ChatGPT a general question"
-//	@Success		200	{object}	stdmodels.StandardMessage	"response"
-//	@failure		500	{object}	stdmodels.StandardError"error"
+//	@Param			message	query		string						true	"Ask ChatGPT a general question"
+//	@Success		200		{object}	stdmodels.StandardMessage	"response"
+//	@failure		500		{object}	stdmodels.StandardError"error"
 //
-// @Security Authorization
+//	@Security		Authorization
 //
 //	@Router			/openai/general [get]
-func (h *Handler) GeneralOpenAI(w http.ResponseWriter, r *http.Request) {
-	contentType := r.Header.Get("Content-Type")
-	var req ChatRequest
+func (h *Handler) GeneralOpenAI(w http.ResponseWriter, r *http.Request) (*stdmodels.StandardMessage, error) {
 
-	if contentType == "application/json" {
-		err := json.NewDecoder(r.Body).Decode(&req)
-		if err != nil {
-			stdmodels.FailureReponse("Failed To decode content", w, http.StatusInternalServerError, []string{err.Error()})
-			return
-		}
-	} else {
-		queryParams := r.URL.Query()
-		req.Message = queryParams.Get("message")
+	request, err := shared.GetParams(r, &ChatRequest{})
+	if err != nil {
+		resp := stdmodels.NewFailureResponse(
+			"Failed to send message",
+			http.StatusInternalServerError,
+			[]string{err.Error()},
+		)
+		return nil, resp
 	}
+	req := *request.(*ChatRequest)
 
 	result, err := h.createChatCompletion(req.Message, "mistral:instruct")
 	if err != nil {
-		stdmodels.FailureReponse("Failed to Send Message", w, http.StatusInternalServerError, []string{err.Error()})
-		return
+		resp := stdmodels.NewFailureResponse(
+			"Failed to send message",
+			http.StatusInternalServerError,
+			[]string{err.Error()},
+		)
+		return nil, resp
 	}
 
-	stdmodels.SuccessResponse(result, w, http.StatusOK)
+	resp := stdmodels.NewMessageResponse(result, http.StatusOK)
+	return resp, nil
 }
 
 // TravelAgentOpenAI godoc
@@ -69,35 +72,38 @@ func (h *Handler) GeneralOpenAI(w http.ResponseWriter, r *http.Request) {
 //	@Tags			openai
 //	@Accept			json
 //	@Produce		application/json
-//	@Param			message	query		string			true	"Ask ChatGPT for suggestions as a travel agent"
-//	@Success		200	{object}	stdmodels.StandardMessage	"response"
-//	@failure		500	{object}	stdmodels.StandardError"error"
+//	@Param			message	query		string						true	"Ask ChatGPT for suggestions as a travel agent"
+//	@Success		200		{object}	stdmodels.StandardMessage	"response"
+//	@failure		500		{object}	stdmodels.StandardError"error"
 //
-// @Security Authorization
+//	@Security		Authorization
 //
 //	@Router			/openai/travelagent [get]
-func (h *Handler) TravelAgentOpenAI(w http.ResponseWriter, r *http.Request) {
-	contentType := r.Header.Get("Content-Type")
-	var req ChatRequest
+func (h *Handler) TravelAgentOpenAI(w http.ResponseWriter, r *http.Request) (*stdmodels.StandardMessage, error) {
 
-	if contentType == "application/json" {
-		err := json.NewDecoder(r.Body).Decode(&req)
-		if err != nil {
-			stdmodels.FailureReponse("Failed To decode content", w, http.StatusInternalServerError, []string{err.Error()})
-			return
-		}
-	} else {
-		queryParams := r.URL.Query()
-		req.Message = queryParams.Get("message")
+	request, err := shared.GetParams(r, &ChatRequest{})
+	if err != nil {
+		resp := stdmodels.NewFailureResponse(
+			"Failed to send message",
+			http.StatusInternalServerError,
+			[]string{err.Error()},
+		)
+		return nil, resp
 	}
+	req := *request.(*ChatRequest)
 
 	req.Message = "I want you to act as a travel guide. I will give you my location and you will give me suggestions. " + req.Message
 
 	result, err := h.createChatCompletion(req.Message, "mistral:instruct")
 	if err != nil {
-		stdmodels.FailureReponse("Failed to Send Message", w, http.StatusInternalServerError, []string{err.Error()})
-		return
+		resp := stdmodels.NewFailureResponse(
+			"Failed to send message",
+			http.StatusInternalServerError,
+			[]string{err.Error()},
+		)
+		return nil, resp
 	}
 
-	stdmodels.SuccessResponse(result, w, http.StatusOK)
+	resp := stdmodels.NewMessageResponse(result, http.StatusOK)
+	return resp, nil
 }

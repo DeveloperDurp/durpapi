@@ -1,5 +1,10 @@
 basePath: /
 definitions:
+  dadjoke.DadJoke:
+    properties:
+      joke:
+        type: string
+    type: object
   stdmodels.StandardError:
     properties:
       description:
@@ -13,8 +18,9 @@ definitions:
     type: object
   stdmodels.StandardMessage:
     properties:
-      message:
-        type: string
+      message: {}
+      status:
+        type: integer
     type: object
 info:
   contact:
@@ -34,7 +40,7 @@ paths:
       - application/json
       description: Get the health of the API
       produces:
-      - application/json
+      - application/jso
       responses:
         "200":
           description: response
@@ -86,7 +92,7 @@ paths:
         "200":
           description: response
           schema:
-            $ref: '#/definitions/stdmodels.StandardMessage'
+            $ref: '#/definitions/dadjoke.DadJoke'
         "500":
           description: error
           schema:
