@@ -15,7 +15,7 @@ import (
 	"gitlab.com/DeveloperDurp/DurpAPI/pkg/dadjoke"
 	"gitlab.com/DeveloperDurp/DurpAPI/pkg/health"
 	"gitlab.com/DeveloperDurp/DurpAPI/pkg/openai"
-	h "gitlab.com/developerdurp/stdmodels"
+	"gitlab.com/developerdurp/durpify/handlers"
 )
 
 type Controller struct {
@@ -108,20 +108,20 @@ func (c *Controller) loadAll(router *http.ServeMux) error {
 
 	// router.Handle("/", middleware.EnsureAdmin(adminRouter))
 
-	router.HandleFunc("/", h.Make(defaultHandler))
+	router.HandleFunc("/", handlers.Make(defaultHandler))
 	router.HandleFunc("/swagger/*", httpSwagger.Handler())
 
 	health, err := health.NewHandler()
-	router.HandleFunc("GET /health/gethealth", h.Make(health.Get))
+	router.HandleFunc("GET /health/gethealth", handlers.Make(health.Get))
 
 	dadjoke, err := dadjoke.NewHandler(c.Db)
-	router.HandleFunc("GET /jokes/dadjoke", h.Make(dadjoke.Get))
-	router.HandleFunc("POST /jokes/dadjoke", h.Make(dadjoke.Post))
-	router.HandleFunc("DELETE /jokes/dadjoke", h.Make(dadjoke.Delete))
+	router.HandleFunc("GET /jokes/dadjoke", handlers.Make(dadjoke.Get))
+	router.HandleFunc("POST /jokes/dadjoke", handlers.Make(dadjoke.Post))
+	router.HandleFunc("DELETE /jokes/dadjoke", handlers.Make(dadjoke.Delete))
 
 	openai, err := openai.NewHandler(c.Cfg.LlamaURL)
-	router.HandleFunc("GET /openai/general", h.Make(openai.GeneralOpenAI))
-	router.HandleFunc("GET /openai/travelagent", h.Make(openai.TravelAgentOpenAI))
+	router.HandleFunc("GET /openai/general", handlers.Make(openai.GeneralOpenAI))
+	router.HandleFunc("GET /openai/travelagent", handlers.Make(openai.TravelAgentOpenAI))
 
 	if err != nil {
 		return err
@@ -130,7 +130,7 @@ func (c *Controller) loadAll(router *http.ServeMux) error {
 }
 
 func defaultHandler(w http.ResponseWriter, r *http.Request) (*h.StandardMessage, error) {
-	resp := h.NewFailureResponse(
+	resp := handlers.NewFailureResponse(
 		"Page does not exist",
 		http.StatusNotFound,
 		[]string{"Page not found"},

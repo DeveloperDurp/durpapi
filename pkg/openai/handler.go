@@ -2,9 +2,8 @@ package openai
 
 import (
 	"gitlab.com/DeveloperDurp/DurpAPI/pkg/shared"
+	"gitlab.com/developerdurp/durpify/handlers"
 	"net/http"
-
-	"gitlab.com/developerdurp/stdmodels"
 )
 
 type Handler struct {
@@ -32,17 +31,17 @@ type Response struct {
 //	@Accept			json
 //	@Produce		application/json
 //	@Param			message	query		string						true	"Ask ChatGPT a general question"
-//	@Success		200		{object}	stdmodels.StandardMessage	"response"
-//	@failure		500		{object}	stdmodels.StandardError"error"
+//	@Success		200		{object}	handlers.StandardMessage	"response"
+//	@failure		500		{object}	handlers.StandardError"error"
 //
 //	@Security		Authorization
 //
 //	@Router			/openai/general [get]
-func (h *Handler) GeneralOpenAI(w http.ResponseWriter, r *http.Request) (*stdmodels.StandardMessage, error) {
+func (h *Handler) GeneralOpenAI(w http.ResponseWriter, r *http.Request) (*handlers.StandardMessage, error) {
 
 	request, err := shared.GetParams(r, &ChatRequest{})
 	if err != nil {
-		resp := stdmodels.NewFailureResponse(
+		resp := handlers.NewFailureResponse(
 			"Failed to send message",
 			http.StatusInternalServerError,
 			[]string{err.Error()},
@@ -53,7 +52,7 @@ func (h *Handler) GeneralOpenAI(w http.ResponseWriter, r *http.Request) (*stdmod
 
 	result, err := h.createChatCompletion(req.Message, "mistral:instruct")
 	if err != nil {
-		resp := stdmodels.NewFailureResponse(
+		resp := handlers.NewFailureResponse(
 			"Failed to send message",
 			http.StatusInternalServerError,
 			[]string{err.Error()},
@@ -61,7 +60,7 @@ func (h *Handler) GeneralOpenAI(w http.ResponseWriter, r *http.Request) (*stdmod
 		return nil, resp
 	}
 
-	resp := stdmodels.NewMessageResponse(result, http.StatusOK)
+	resp := handlers.NewMessageResponse(result, http.StatusOK)
 	return resp, nil
 }
 
@@ -73,17 +72,17 @@ func (h *Handler) GeneralOpenAI(w http.ResponseWriter, r *http.Request) (*stdmod
 //	@Accept			json
 //	@Produce		application/json
 //	@Param			message	query		string						true	"Ask ChatGPT for suggestions as a travel agent"
-//	@Success		200		{object}	stdmodels.StandardMessage	"response"
-//	@failure		500		{object}	stdmodels.StandardError"error"
+//	@Success		200		{object}	handlers.StandardMessage	"response"
+//	@failure		500		{object}	handlers.StandardError"error"
 //
 //	@Security		Authorization
 //
 //	@Router			/openai/travelagent [get]
-func (h *Handler) TravelAgentOpenAI(w http.ResponseWriter, r *http.Request) (*stdmodels.StandardMessage, error) {
+func (h *Handler) TravelAgentOpenAI(w http.ResponseWriter, r *http.Request) (*handlers.StandardMessage, error) {
 
 	request, err := shared.GetParams(r, &ChatRequest{})
 	if err != nil {
-		resp := stdmodels.NewFailureResponse(
+		resp := handlers.NewFailureResponse(
 			"Failed to send message",
 			http.StatusInternalServerError,
 			[]string{err.Error()},
@@ -96,7 +95,7 @@ func (h *Handler) TravelAgentOpenAI(w http.ResponseWriter, r *http.Request) (*st
 
 	result, err := h.createChatCompletion(req.Message, "mistral:instruct")
 	if err != nil {
-		resp := stdmodels.NewFailureResponse(
+		resp := handlers.NewFailureResponse(
 			"Failed to send message",
 			http.StatusInternalServerError,
 			[]string{err.Error()},
@@ -104,6 +103,6 @@ func (h *Handler) TravelAgentOpenAI(w http.ResponseWriter, r *http.Request) (*st
 		return nil, resp
 	}
 
-	resp := stdmodels.NewMessageResponse(result, http.StatusOK)
+	resp := handlers.NewMessageResponse(result, http.StatusOK)
 	return resp, nil
 }

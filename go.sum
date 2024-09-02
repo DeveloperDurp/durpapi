@@ -174,10 +174,10 @@ github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9dec
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
 github.com/yusufpapurcu/wmi v1.2.3 h1:E1ctvB7uKFMOJw3fdOW32DwGE9I7t++CRUEMKvFoFiw=
 github.com/yusufpapurcu/wmi v1.2.3/go.mod h1:SBZ9tNy3G9/m5Oi98Zks0QjeHVDvuK0qfxQmPyzfmi0=
+gitlab.com/developerdurp/durpify/handlers v0.0.0-20240902184301-9f6d8ac6219b h1:1JJ8A3suyoIiq/GB4CE4h2RIlJhudWnTCUf2Qrx7nx0=
+gitlab.com/developerdurp/durpify/handlers v0.0.0-20240902184301-9f6d8ac6219b/go.mod h1:ZWQURdqvqLVAVle3SPjxd9gZ7CR/33TB2nwN1ZUmbq8=
 gitlab.com/developerdurp/logger v1.0.0 h1:wozbKR26RVoFVaUgJV2x8WsZHLWOJBqaSCSTpK7crfk=
 gitlab.com/developerdurp/logger v1.0.0/go.mod h1:x6gZvBeEq8oQUXeQoLY2m78mYJjvb5KE+7Vb5AcS8oo=
-gitlab.com/developerdurp/stdmodels v1.0.2 h1:yXaX6MM37Y9uJccy33trezbao/2TzlCxwVQexwbyFJU=
-gitlab.com/developerdurp/stdmodels v1.0.2/go.mod h1:RRLS9Wek0YYMy3Wz0pWhfYyYcu52vr06KPFVxQ6g0OU=
 go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.49.0 h1:jq9TW8u3so/bN+JPT166wjOI6/vQPF6Xe7nMNIltagk=
 go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.49.0/go.mod h1:p8pYQP+m5XfbZm9fxtSKAbM6oIllS7s2AfxrChvc7iw=
 go.opentelemetry.io/otel v1.24.0 h1:0LAOdjNmQeSTzGBzduGe/rU4tZhMwL5rWgtp9Ku5Jfo=

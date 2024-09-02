@@ -1,7 +1,7 @@
 package health
 
 import (
-	"gitlab.com/developerdurp/stdmodels"
+	"gitlab.com/developerdurp/durpify/handlers"
 	"net/http"
 )
 
@@ -18,15 +18,15 @@ func NewHandler() (*Handler, error) {
 //	@Tags			health
 //	@Accept			json
 //	@Produce		application/jso
-//	@Success		200		{object}	stdmodels.StandardMessage	"response"
-//	@failure		500	{object}	stdmodels.StandardError"error"
+//	@Success		200		{object}	handlers.StandardMessage	"response"
+//	@failure		500	{object}	handlers.StandardError"error"
 //
 // @Security Authorization
 //
 //	@Router			/health/gethealth [get]
-func (h *Handler) Get(w http.ResponseWriter, r *http.Request) (*stdmodels.StandardMessage, error) {
+func (h *Handler) Get(w http.ResponseWriter, r *http.Request) (*handlers.StandardMessage, error) {
 
-	// err := stdmodels.StandardError{
+	// err := handlers.StandardError{
 	//	Message: "This is a test",
 	//	Status:  500,
 	//	Description: []string{
@@ -36,6 +36,6 @@ func (h *Handler) Get(w http.ResponseWriter, r *http.Request) (*stdmodels.Standa
 	// }
 	// return nil, err
 
-	resp := stdmodels.NewBasicResponse()
+	resp := handlers.NewBasicResponse()
 	return resp, nil
 }

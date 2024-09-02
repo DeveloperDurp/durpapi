@@ -2,9 +2,9 @@ package dadjoke
 
 import (
 	"gitlab.com/DeveloperDurp/DurpAPI/pkg/shared"
+	"gitlab.com/developerdurp/durpify/handlers"
 	"net/http"
 
-	"gitlab.com/developerdurp/stdmodels"
 	"gorm.io/gorm"
 )
 
@@ -32,23 +32,23 @@ func NewHandler(db *gorm.DB) (*Handler, error) {
 //	@Accept			json
 //	@Produce		application/json
 //	@Success		200	{object}	DadJoke	"response"
-//	@failure		500	{object}	stdmodels.StandardError"error"
+//	@failure		500	{object}	handlers.StandardError"error"
 //
 //	@Security		Authorization
 //
 //	@Router			/jokes/dadjoke [get]
-func (h *Handler) Get(w http.ResponseWriter, r *http.Request) (*stdmodels.StandardMessage, error) {
+func (h *Handler) Get(w http.ResponseWriter, r *http.Request) (*handlers.StandardMessage, error) {
 	joke, err := h.GetRandomDadJoke()
 
 	if err != nil {
-		resp := stdmodels.NewFailureResponse("Failed to get Joke",
+		resp := handlers.NewFailureResponse("Failed to get Joke",
 			http.StatusInternalServerError,
 			[]string{err.Error()},
 		)
 		return nil, resp
 	}
 
-	resp := stdmodels.NewMessageResponse(joke, http.StatusOK)
+	resp := handlers.NewMessageResponse(joke, http.StatusOK)
 	return resp, nil
 }
 
@@ -60,17 +60,17 @@ func (h *Handler) Get(w http.ResponseWriter, r *http.Request) (*stdmodels.Standa
 //	@Accept			json
 //	@Produce		application/json
 //	@Param			joke	query		string						true	"Dad Joke you wish to enter into database"
-//	@Success		200		{object}	stdmodels.StandardMessage	"response"
-//	@failure		500		{object}	stdmodels.StandardError"error"
+//	@Success		200		{object}	handlers.StandardMessage	"response"
+//	@failure		500		{object}	handlers.StandardError"error"
 //
 //	@Security		Authorization
 //
 //	@Router			/jokes/dadjoke [post]
-func (h *Handler) Post(w http.ResponseWriter, r *http.Request) (*stdmodels.StandardMessage, error) {
+func (h *Handler) Post(w http.ResponseWriter, r *http.Request) (*handlers.StandardMessage, error) {
 
 	request, err := shared.GetParams(r, &DadJoke{})
 	if err != nil {
-		resp := stdmodels.NewFailureResponse(
+		resp := handlers.NewFailureResponse(
 			"Failed to add Joke",
 			http.StatusInternalServerError,
 			[]string{err.Error()},
@@ -81,7 +81,7 @@ func (h *Handler) Post(w http.ResponseWriter, r *http.Request) (*stdmodels.Stand
 
 	err = h.PostDadJoke(req)
 	if err != nil {
-		resp := stdmodels.NewFailureResponse(
+		resp := handlers.NewFailureResponse(
 			"Failed to add Joke",
 			http.StatusInternalServerError,
 			[]string{err.Error()},
@@ -89,7 +89,7 @@ func (h *Handler) Post(w http.ResponseWriter, r *http.Request) (*stdmodels.Stand
 		return nil, resp
 	}
 
-	resp := stdmodels.NewBasicResponse()
+	resp := handlers.NewBasicResponse()
 	return resp, nil
 }
 
@@ -101,17 +101,17 @@ func (h *Handler) Post(w http.ResponseWriter, r *http.Request) (*stdmodels.Stand
 //	@Accept			json
 //	@Produce		application/json
 //	@Param			joke	query		string						true	"Dad joke you wish to delete from the database"
-//	@Success		200		{object}	stdmodels.StandardMessage	"response"
-//	@failure		500		{object}	stdmodels.StandardError"error"
+//	@Success		200		{object}	handlers.StandardMessage	"response"
+//	@failure		500		{object}	handlers.StandardError"error"
 //
 //	@Security		Authorization
 //
 //	@Router			/jokes/dadjoke [delete]
-func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) (*stdmodels.StandardMessage, error) {
+func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) (*handlers.StandardMessage, error) {
 
 	request, err := shared.GetParams(r, &DadJoke{})
 	if err != nil {
-		resp := stdmodels.NewFailureResponse(
+		resp := handlers.NewFailureResponse(
 			"Failed to delete Joke",
 			http.StatusInternalServerError,
 			[]string{err.Error()},
@@ -122,7 +122,7 @@ func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) (*stdmodels.Sta
 
 	err = h.DeleteDadJoke(req)
 	if err != nil {
-		resp := stdmodels.NewFailureResponse(
+		resp := handlers.NewFailureResponse(
 			"Failed to delete Joke",
 			http.StatusInternalServerError,
 			[]string{err.Error()},
@@ -130,6 +130,6 @@ func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) (*stdmodels.Sta
 		return nil, resp
 	}
 
-	resp := stdmodels.NewBasicResponse()
+	resp := handlers.NewBasicResponse()
 	return resp, nil
 }

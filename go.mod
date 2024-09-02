@@ -1,6 +1,6 @@
 module gitlab.com/DeveloperDurp/DurpAPI
 
-go 1.22.0
+go 1.23.0
 
 require (
 	github.com/caarlos0/env/v6 v6.10.1
@@ -10,8 +10,8 @@ require (
 	github.com/swaggo/http-swagger v1.3.4
 	github.com/swaggo/swag v1.16.3
 	github.com/testcontainers/testcontainers-go v0.32.0
+	gitlab.com/developerdurp/durpify/handlers v0.0.0-20240902184301-9f6d8ac6219b
 	gitlab.com/developerdurp/logger v1.0.0
-	gitlab.com/developerdurp/stdmodels v1.0.2
 	gorm.io/driver/postgres v1.5.9
 	gorm.io/gorm v1.25.11
 )
