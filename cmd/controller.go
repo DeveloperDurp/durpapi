@@ -114,7 +114,7 @@ func (c *Controller) loadAll(router *http.ServeMux) error {
 	// router.Handle("/", middleware.EnsureAdmin(adminRouter))
 
 	router.HandleFunc("/", handlers.Make(defaultHandler))
-	router.HandleFunc("/swagger/*", httpSwagger.Handler())
+	router.HandleFunc("/swagger/", httpSwagger.Handler())
 
 	health, err := health.NewHandler()
 	router.HandleFunc("GET /health/gethealth", handlers.Make(health.Get))
