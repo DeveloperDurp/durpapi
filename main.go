@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"gitlab.com/DeveloperDurp/DurpAPI/cmd"
-	"gitlab.com/DeveloperDurp/DurpAPI/docs"
 )
 
 //	@title			DurpAPI
@@ -26,14 +25,7 @@ import (
 func main() {
 	c := controller.NewController()
 
-	docs.SwaggerInfo.Host = c.Cfg.Host
-	docs.SwaggerInfo.Version = c.Cfg.Version
-
 	if err := c.Run(); err != nil {
 		log.Fatal(err)
 	}
-	// adminRouter := http.NewServeMux()
-
-	// router.Handle("/", middleware.EnsureAdmin(adminRouter))
-
 }

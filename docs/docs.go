@@ -46,13 +46,13 @@ const docTemplate = `{
                     "200": {
                         "description": "response",
                         "schema": {
-                            "$ref": "#/definitions/stdmodels.StandardMessage"
+                            "$ref": "#/definitions/handlers.StandardMessage"
                         }
                     },
                     "500": {
                         "description": "error",
                         "schema": {
-                            "$ref": "#/definitions/stdmodels.StandardError"
+                            "$ref": "#/definitions/handlers.StandardError"
                         }
                     }
                 }
@@ -86,7 +86,7 @@ const docTemplate = `{
                     "500": {
                         "description": "error",
                         "schema": {
-                            "$ref": "#/definitions/stdmodels.StandardError"
+                            "$ref": "#/definitions/handlers.StandardError"
                         }
                     }
                 }
@@ -121,13 +121,13 @@ const docTemplate = `{
                     "200": {
                         "description": "response",
                         "schema": {
-                            "$ref": "#/definitions/stdmodels.StandardMessage"
+                            "$ref": "#/definitions/handlers.StandardMessage"
                         }
                     },
                     "500": {
                         "description": "error",
                         "schema": {
-                            "$ref": "#/definitions/stdmodels.StandardError"
+                            "$ref": "#/definitions/handlers.StandardError"
                         }
                     }
                 }
@@ -162,13 +162,13 @@ const docTemplate = `{
                     "200": {
                         "description": "response",
                         "schema": {
-                            "$ref": "#/definitions/stdmodels.StandardMessage"
+                            "$ref": "#/definitions/handlers.StandardMessage"
                         }
                     },
                     "500": {
                         "description": "error",
                         "schema": {
-                            "$ref": "#/definitions/stdmodels.StandardError"
+                            "$ref": "#/definitions/handlers.StandardError"
                         }
                     }
                 }
@@ -205,13 +205,13 @@ const docTemplate = `{
                     "200": {
                         "description": "response",
                         "schema": {
-                            "$ref": "#/definitions/stdmodels.StandardMessage"
+                            "$ref": "#/definitions/handlers.StandardMessage"
                         }
                     },
                     "500": {
                         "description": "error",
                         "schema": {
-                            "$ref": "#/definitions/stdmodels.StandardError"
+                            "$ref": "#/definitions/handlers.StandardError"
                         }
                     }
                 }
@@ -248,13 +248,13 @@ const docTemplate = `{
                     "200": {
                         "description": "response",
                         "schema": {
-                            "$ref": "#/definitions/stdmodels.StandardMessage"
+                            "$ref": "#/definitions/handlers.StandardMessage"
                         }
                     },
                     "500": {
                         "description": "error",
                         "schema": {
-                            "$ref": "#/definitions/stdmodels.StandardError"
+                            "$ref": "#/definitions/handlers.StandardError"
                         }
                     }
                 }
@@ -270,7 +270,7 @@ const docTemplate = `{
                 }
             }
         },
-        "stdmodels.StandardError": {
+        "handlers.StandardError": {
             "type": "object",
             "properties": {
                 "description": {
@@ -287,7 +287,7 @@ const docTemplate = `{
                 }
             }
         },
-        "stdmodels.StandardMessage": {
+        "handlers.StandardMessage": {
             "type": "object",
             "properties": {
                 "message": {},

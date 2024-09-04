@@ -5,7 +5,7 @@ definitions:
       joke:
         type: string
     type: object
-  stdmodels.StandardError:
+  handlers.StandardError:
     properties:
       description:
         items:
@@ -16,7 +16,7 @@ definitions:
       status:
         type: integer
     type: object
-  stdmodels.StandardMessage:
+  handlers.StandardMessage:
     properties:
       message: {}
       status:
@@ -45,11 +45,11 @@ paths:
         "200":
           description: response
           schema:
-            $ref: '#/definitions/stdmodels.StandardMessage'
+            $ref: '#/definitions/handlers.StandardMessage'
         "500":
           description: error
           schema:
-            $ref: '#/definitions/stdmodels.StandardError'
+            $ref: '#/definitions/handlers.StandardError'
       security:
       - Authorization: []
       summary: Generate Health status
@@ -72,11 +72,11 @@ paths:
         "200":
           description: response
           schema:
-            $ref: '#/definitions/stdmodels.StandardMessage'
+            $ref: '#/definitions/handlers.StandardMessage'
         "500":
           description: error
           schema:
-            $ref: '#/definitions/stdmodels.StandardError'
+            $ref: '#/definitions/handlers.StandardError'
       security:
       - Authorization: []
       summary: Generate dadjoke
@@ -96,7 +96,7 @@ paths:
         "500":
           description: error
           schema:
-            $ref: '#/definitions/stdmodels.StandardError'
+            $ref: '#/definitions/handlers.StandardError'
       security:
       - Authorization: []
       summary: Get dadjoke
@@ -118,11 +118,11 @@ paths:
         "200":
           description: response
           schema:
-            $ref: '#/definitions/stdmodels.StandardMessage'
+            $ref: '#/definitions/handlers.StandardMessage'
         "500":
           description: error
           schema:
-            $ref: '#/definitions/stdmodels.StandardError'
+            $ref: '#/definitions/handlers.StandardError'
       security:
       - Authorization: []
       summary: Generate dadjoke
@@ -145,11 +145,11 @@ paths:
         "200":
           description: response
           schema:
-            $ref: '#/definitions/stdmodels.StandardMessage'
+            $ref: '#/definitions/handlers.StandardMessage'
         "500":
           description: error
           schema:
-            $ref: '#/definitions/stdmodels.StandardError'
+            $ref: '#/definitions/handlers.StandardError'
       security:
       - Authorization: []
       summary: Gerneral ChatGPT
@@ -172,11 +172,11 @@ paths:
         "200":
           description: response
           schema:
-            $ref: '#/definitions/stdmodels.StandardMessage'
+            $ref: '#/definitions/handlers.StandardMessage'
         "500":
           description: error
           schema:
-            $ref: '#/definitions/stdmodels.StandardError'
+            $ref: '#/definitions/handlers.StandardError'
       security:
       - Authorization: []
       summary: Travel Agent ChatGPT

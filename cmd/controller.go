@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"gitlab.com/DeveloperDurp/DurpAPI/docs"
 	"log"
 	"net/http"
 
@@ -81,6 +82,10 @@ func NewController() *Controller {
 
 func (c *Controller) Run() error {
 
+	docs.SwaggerInfo.Host = c.Cfg.Host
+	docs.SwaggerInfo.Version = c.Cfg.Version
+	docs.SwaggerInfo.BasePath = "/"
+
 	router := http.NewServeMux()
 
 	err := c.loadAll(router)
@@ -129,7 +134,7 @@ func (c *Controller) loadAll(router *http.ServeMux) error {
 	return nil
 }
 
-func defaultHandler(w http.ResponseWriter, r *http.Request) (*h.StandardMessage, error) {
+func defaultHandler(w http.ResponseWriter, r *http.Request) (*handlers.StandardMessage, error) {
 	resp := handlers.NewFailureResponse(
 		"Page does not exist",
 		http.StatusNotFound,
