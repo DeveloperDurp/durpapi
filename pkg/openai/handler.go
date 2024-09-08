@@ -7,11 +7,15 @@ import (
 )
 
 type Handler struct {
-	LlamaURL string
+	LlamaURL  string
+	LlamaPass string
 }
 
-func NewHandler(LlamaURL string) (*Handler, error) {
-	return &Handler{LlamaURL: LlamaURL}, nil
+func NewHandler(LlamaURL, LLamaPass string) (*Handler, error) {
+	return &Handler{
+		LlamaURL:  LlamaURL,
+		LlamaPass: LLamaPass,
+	}, nil
 }
 
 type ChatRequest struct {

@@ -22,12 +22,16 @@ func (h *Handler) createChatCompletion(message string, model string) (string, er
 		return "", fmt.Errorf("error encoding request body: %v", err)
 	}
 
+	client := http.Client{}
+	req, err := http.NewRequest("POST", h.LlamaURL+"/api/generate", bytes.NewBuffer(requestBodyBytes))
+	if err != nil {
+		return "", fmt.Errorf("error sending POST request: %v", err)
+	}
+
+	req.Header.Set("Authorization", h.LlamaPass)
+
 	// Send a POST request to the specified URL with the request body
-	response, err := http.Post(
-		"http://"+h.LlamaURL+"/api/generate",
-		"application/json",
-		bytes.NewBuffer(requestBodyBytes),
-	)
+	response, err := client.Do(req)
 	if err != nil {
 		return "", fmt.Errorf("error sending POST request: %v", err)
 	}

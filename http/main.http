@@ -1,0 +1,49 @@
+###
+GET {{baseURL}}/health/gethealth
+Accept: application/json
+Content-Type: application/json
+
+{
+
+}
+
+###
+GET {{baseURL}}/jokes/dadjoke
+Accept: application/json
+Content-Type: application/json
+
+###
+POST {{baseURL}}/jokes/dadjoke
+Accept: application/json
+Content-Type: application/json
+
+{
+  "joke": "test"
+}
+
+###
+DELETE {{baseURL}}/jokes/dadjoke
+Accept: application/json
+Content-Type: application/json
+
+{
+  "joke": "test"
+}
+###
+
+GET {{baseURL}}/openai/general
+Accept: application/json
+Content-Type: application/json
+
+{
+  "message": "Hello World!"
+}
+
+###
+GET {{baseURL}}/openai/travelagent
+Accept: application/json
+Content-Type: application/json
+
+{
+  "message": "Coffee in Chicago"
+}

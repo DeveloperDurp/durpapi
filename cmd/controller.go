@@ -31,6 +31,7 @@ type Config struct {
 	Groupsenv string `env:"groupsenv"`
 	JwksURL   string `env:"jwksurl"`
 	LlamaURL  string `env:"llamaurl"`
+	LlamaPass string `env:"llamapass"`
 }
 
 type DBConfig struct {
@@ -124,7 +125,7 @@ func (c *Controller) loadAll(router *http.ServeMux) error {
 	router.HandleFunc("POST /jokes/dadjoke", handlers.Make(dadjoke.Post))
 	router.HandleFunc("DELETE /jokes/dadjoke", handlers.Make(dadjoke.Delete))
 
-	openai, err := openai.NewHandler(c.Cfg.LlamaURL)
+	openai, err := openai.NewHandler(c.Cfg.LlamaURL, c.Cfg.LlamaPass)
 	router.HandleFunc("GET /openai/general", handlers.Make(openai.GeneralOpenAI))
 	router.HandleFunc("GET /openai/travelagent", handlers.Make(openai.TravelAgentOpenAI))
 
