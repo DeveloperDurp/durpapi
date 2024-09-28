@@ -3,6 +3,8 @@ package controller
 import (
 	"fmt"
 	"gitlab.com/DeveloperDurp/DurpAPI/docs"
+	"gitlab.com/DeveloperDurp/DurpAPI/pkg/dadjoke"
+	"gitlab.com/DeveloperDurp/DurpAPI/pkg/openai"
 	"log"
 	"net/http"
 
@@ -13,9 +15,7 @@ import (
 	"gorm.io/gorm"
 
 	"gitlab.com/DeveloperDurp/DurpAPI/middleware"
-	"gitlab.com/DeveloperDurp/DurpAPI/pkg/dadjoke"
 	"gitlab.com/DeveloperDurp/DurpAPI/pkg/health"
-	"gitlab.com/DeveloperDurp/DurpAPI/pkg/openai"
 	"gitlab.com/developerdurp/durpify/handlers"
 )
 
@@ -117,25 +117,39 @@ func (c *Controller) loadAll(router *http.ServeMux) error {
 	router.HandleFunc("/", handlers.Make(defaultHandler))
 	router.HandleFunc("/swagger/", httpSwagger.Handler())
 
-	health, err := health.NewHandler()
-	router.HandleFunc("GET /health/gethealth", handlers.Make(health.Get))
-
-	dadjoke, err := dadjoke.NewHandler(c.Db)
-	router.HandleFunc("GET /jokes/dadjoke", handlers.Make(dadjoke.Get))
-	router.HandleFunc("POST /jokes/dadjoke", handlers.Make(dadjoke.Post))
-	router.HandleFunc("DELETE /jokes/dadjoke", handlers.Make(dadjoke.Delete))
-
-	openai, err := openai.NewHandler(c.Cfg.LlamaURL, c.Cfg.LlamaPass)
-	router.HandleFunc("GET /openai/general", handlers.Make(openai.GeneralOpenAI))
-	router.HandleFunc("GET /openai/travelagent", handlers.Make(openai.TravelAgentOpenAI))
-
+	healthHandler := health.NewHandler()
+	err := health.RegisterOpenAIHandler(router, healthHandler)
 	if err != nil {
 		return err
 	}
+
+	dadjokeHandler := dadjoke.NewHandler(
+		c.Db,
+	)
+	err = dadjoke.RegisterDadJokeHandler(router, dadjokeHandler)
+	if err != nil {
+		return err
+	}
+
+	openAIHandler := openai.NewHandler(
+		c.Cfg.LlamaURL,
+		c.Cfg.LlamaPass,
+	)
+	err = openai.RegisterOpenAIHandler(router, openAIHandler)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
-func defaultHandler(w http.ResponseWriter, r *http.Request) (*handlers.StandardMessage, error) {
+func defaultHandler(
+	w http.ResponseWriter,
+	r *http.Request,
+) (
+	*handlers.StandardMessage,
+	error,
+) {
 	resp := handlers.NewFailureResponse(
 		"Page does not exist",
 		http.StatusNotFound,

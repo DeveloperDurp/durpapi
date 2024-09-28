@@ -7,8 +7,21 @@ import (
 
 type Handler struct{}
 
-func NewHandler() (*Handler, error) {
-	return &Handler{}, nil
+func RegisterOpenAIHandler(
+	router *http.ServeMux,
+	handler *Handler,
+) error {
+
+	router.HandleFunc(
+		"GET /health/gethealth",
+		handlers.Make(handler.Get),
+	)
+
+	return nil
+}
+
+func NewHandler() *Handler {
+	return &Handler{}
 }
 
 // getHealth godoc

@@ -11,11 +11,28 @@ type Handler struct {
 	LlamaPass string
 }
 
-func NewHandler(LlamaURL, LLamaPass string) (*Handler, error) {
+func NewHandler(LlamaURL, LlamaPass string) *Handler {
 	return &Handler{
 		LlamaURL:  LlamaURL,
-		LlamaPass: LLamaPass,
-	}, nil
+		LlamaPass: LlamaPass,
+	}
+}
+
+func RegisterOpenAIHandler(
+	router *http.ServeMux,
+	handler *Handler,
+) error {
+
+	router.HandleFunc(
+		"GET /openai/general",
+		handlers.Make(handler.GeneralOpenAI),
+	)
+	router.HandleFunc(
+		"GET /openai/travelagent",
+		handlers.Make(handler.TravelAgentOpenAI),
+	)
+
+	return nil
 }
 
 type ChatRequest struct {

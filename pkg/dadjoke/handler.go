@@ -16,12 +16,35 @@ type DadJoke struct {
 	JOKE string `json:"joke"`
 }
 
-func NewHandler(db *gorm.DB) (*Handler, error) {
-	err := db.AutoMigrate(&DadJoke{})
-	if err != nil {
-		return nil, err
+func NewHandler(db *gorm.DB) *Handler {
+	return &Handler{
+		db: db,
 	}
-	return &Handler{db: db}, nil
+}
+
+func RegisterDadJokeHandler(
+	router *http.ServeMux,
+	handler *Handler,
+) error {
+
+	err := handler.db.AutoMigrate(&DadJoke{})
+	if err != nil {
+		return err
+	}
+
+	router.HandleFunc(
+		"GET /jokes/dadjoke",
+		handlers.Make(handler.Get),
+	)
+	router.HandleFunc(
+		"POST /jokes/dadjoke",
+		handlers.Make(handler.Post),
+	)
+	router.HandleFunc(
+		"DELETE /jokes/dadjoke",
+		handlers.Make(handler.Delete),
+	)
+	return nil
 }
 
 // GetDadJoke godoc

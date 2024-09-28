@@ -3,10 +3,6 @@ GET {{baseURL}}/health/gethealth
 Accept: application/json
 Content-Type: application/json
 
-{
-
-}
-
 ###
 GET {{baseURL}}/jokes/dadjoke
 Accept: application/json
