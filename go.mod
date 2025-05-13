@@ -7,7 +7,7 @@ require (
 	github.com/charmbracelet/log v0.4.0
 	github.com/joho/godotenv v1.5.1
 	github.com/stretchr/testify v1.9.0
-	github.com/swaggo/http-swagger v1.3.4
+	github.com/swaggo/http-swagger/v2 v2.0.2
 	github.com/swaggo/swag v1.16.3
 	github.com/testcontainers/testcontainers-go v0.32.0
 	gitlab.com/developerdurp/durpify/handlers v0.0.0-20240902190854-b4562a1da46d
