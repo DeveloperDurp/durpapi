@@ -13,7 +13,7 @@ require (
 	gitlab.com/developerdurp/durpify/handlers v0.0.0-20240902190854-b4562a1da46d
 	gitlab.com/developerdurp/logger v1.0.0
 	gorm.io/driver/postgres v1.5.11
-	gorm.io/gorm v1.25.11
+	gorm.io/gorm v1.26.1
 )
 
 require (
